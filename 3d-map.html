@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản đồ 3D tương tác | Bảo tàng Hoàng Sa - Trường Sa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { margin:0; overflow:hidden; background-color:var(--bg-dark); }
+        #info-panel {
+            position:absolute; top:30px; left:30px; background:var(--bg-card); backdrop-filter:blur(12px);
+            border:1px solid var(--glass-border); border-radius:20px; padding:1.5rem; max-width:350px;
+            color:var(--text-light); z-index:10; box-shadow:var(--glass-shadow); pointer-events:none;
+            opacity:0; transition:opacity 0.3s ease;
+        }
+        #info-panel.active { opacity:1; pointer-events:auto; }
+        #info-panel h3 { color:var(--gold-primary); margin-bottom:0.5rem; font-size:1.8rem; }
+        #info-panel p { color:var(--text-dim); line-height:1.6; }
+        #info-panel .close-btn { position:absolute; top:10px; right:15px; color:var(--text-dim); cursor:pointer; font-size:1.5rem; transition:color 0.3s; }
+        #info-panel .close-btn:hover { color:var(--gold-primary); }
+        .back-btn {
+            position:absolute; top:30px; right:30px; z-index:10; background:var(--bg-card); backdrop-filter:blur(5px);
+            color:var(--text-light); padding:12px 24px; border-radius:40px; text-decoration:none; font-weight:600;
+            border:2px solid var(--gold-primary); transition:var(--transition-smooth); display:flex; align-items:center; gap:8px;
+        }
+        .back-btn:hover { background:var(--gold-primary); color:var(--bg-dark); }
+        #loading { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:var(--gold-primary); font-size:1.2rem; z-index:20; background:rgba(0,0,0,0.5); padding:1rem 2rem; border-radius:50px; backdrop-filter:blur(5px); }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Quay lại</a>
+    <div id="info-panel">
+        <span class="close-btn" onclick="document.getElementById('info-panel').classList.remove('active')">&times;</span>
+        <h3 id="info-title">Tiêu đề</h3>
+        <p id="info-description">Mô tả chi tiết về đảo.</p>
+    </div>
+    <div id="loading">Đang tải bản đồ 3D...</div>
+    <canvas id="map-canvas-3d"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        const canvas = document.getElementById('map-canvas-3d');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0A0F1A);
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+        camera.position.set(0,2,15);
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 1.0;
+        controls.enableZoom = true;
+        controls.maxPolarAngle = Math.PI/2;
+
+        const ambientLight = new THREE.AmbientLight(0x404060);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(5,5,5);
+        scene.add(dirLight);
+
+        const earthGeometry = new THREE.SphereGeometry(5, 64, 64);
+        const textureLoader = new THREE.TextureLoader();
+        const earthTexture = textureLoader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
+        const earthMaterial = new THREE.MeshPhongMaterial({ map: earthTexture, shininess:5, emissive:new THREE.Color(0x112233) });
+        const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+        scene.add(earth);
+
+        const islands = [
+            { name:'Hoàng Sa', lat:16.5, lon:112.5, desc:'Quần đảo Hoàng Sa - bằng chứng chủ quyền từ thế kỷ XVII.' },
+            { name:'Trường Sa', lat:9.0, lon:114.0, desc:'Quần đảo Trường Sa - nơi có các nhà giàn DK1.' },
+            { name:'Song Tử Tây', lat:11.5, lon:114.5, desc:'Đảo Song Tử Tây - một trong những đảo lớn của quần đảo Trường Sa.' },
+            { name:'Nam Yết', lat:10.2, lon:113.7, desc:'Đảo Nam Yết - có rạn san hô đẹp.' },
+            { name:'Sinh Tồn', lat:9.9, lon:113.3, desc:'Đảo Sinh Tồn - có trạm quan trắc khí tượng.' },
+            { name:'Trường Sa Lớn', lat:8.6, lon:111.9, desc:'Đảo Trường Sa Lớn - trung tâm hành chính của huyện Trường Sa.' }
+        ];
+
+        function latLonToPosition(lat, lon, radius) {
+            const phi = (90 - lat) * Math.PI/180;
+            const theta = lon * Math.PI/180;
+            return new THREE.Vector3(
+                radius * Math.sin(phi) * Math.cos(theta),
+                radius * Math.cos(phi),
+                radius * Math.sin(phi) * Math.sin(theta)
+            );
+        }
+
+        const markers = [];
+        islands.forEach(island => {
+            const pos = latLonToPosition(island.lat, island.lon, 5.1);
+            const geometry = new THREE.SphereGeometry(0.2, 16, 16);
+            const material = new THREE.MeshStandardMaterial({ color:0xD4AF37, emissive:0x442200 });
+            const marker = new THREE.Mesh(geometry, material);
+            marker.position.copy(pos);
+            marker.userData = island;
+            scene.add(marker);
+            markers.push(marker);
+        });
+
+        const starsGeometry = new THREE.BufferGeometry();
+        const starsCount = 2000;
+        const starsPositions = new Float32Array(starsCount * 3);
+        for(let i=0; i<starsCount*3; i+=3) {
+            starsPositions[i] = (Math.random()-0.5)*200;
+            starsPositions[i+1] = (Math.random()-0.5)*200;
+            starsPositions[i+2] = (Math.random()-0.5)*200;
+        }
+        starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions,3));
+        const starsMaterial = new THREE.PointsMaterial({ color:0xffffff, size:0.2, transparent:true });
+        const stars = new THREE.Points(starsGeometry, starsMaterial);
+        scene.add(stars);
+
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        renderer.domElement.addEventListener('click', (event) => {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(markers);
+            if (intersects.length > 0) {
+                const hit = intersects[0].object;
+                const island = hit.userData;
+                document.getElementById('info-title').textContent = island.name;
+                document.getElementById('info-description').textContent = island.desc;
+                document.getElementById('info-panel').classList.add('active');
+            }
+        });
+
+        setTimeout(() => { document.getElementById('loading').style.display = 'none'; }, 1000);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            stars.rotation.y += 0.0002;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mở rộng lực lượng | Thời Tây Sơn | Bảo tàng Ảo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root {
+            --bg-deep: #0A0F1A; --bg-dark: #151E2C; --bg-card: rgba(21,30,44,0.85);
+            --gold-primary: #D4AF37; --gold-light: #F5E6B2; --gold-dark: #8B6F3F;
+            --text-light: #FFFFFF; --text-dim: #A0A8B8; --text-dark: #6A7282;
+            --glass-border: rgba(212,175,55,0.25); --glass-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            --placeholder-bg: #1E2636; --font-serif: 'Cormorant Garamond', serif; --font-sans: 'Montserrat', sans-serif;
+            --transition-smooth: all 0.6s cubic-bezier(0.23,1,0.32,1);
+        }
+        body { background-color:var(--bg-deep); color:var(--text-light); font-family:var(--font-sans); overflow-x:hidden; line-height:1.7; font-weight:300; }
+        h1,h2,h3,h4,h5,h6 { font-family:var(--font-serif); font-weight:700; }
+        .gold-text { color:var(--gold-primary); background:linear-gradient(135deg, var(--gold-light), var(--gold-primary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .navbar { position:fixed; top:0; left:0; width:100%; padding:2rem 5rem; display:flex; justify-content:space-between; align-items:center; z-index:1000; transition:var(--transition-smooth); }
+        .navbar.scrolled { background:rgba(10,15,26,0.9); backdrop-filter:blur(20px); padding:1rem 5rem; border-bottom:2px solid var(--gold-primary); }
+        .logo { font-size:2.2rem; font-weight:800; font-family:var(--font-serif); background:linear-gradient(135deg,#FFFFFF,var(--gold-primary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .nav-links { display:flex; gap:3rem; list-style:none; }
+        .nav-links a { color:var(--text-light); text-decoration:none; font-weight:500; font-size:1rem; text-transform:uppercase; letter-spacing:2px; position:relative; padding:0.5rem 0; transition:color 0.3s; }
+        .nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:2px; background:var(--gold-primary); transition:width 0.4s; }
+        .nav-links a:hover { color:var(--gold-primary); }
+        .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+        .nav-links a.active { color:var(--gold-primary); }
+        .nav-item { position:relative; }
+        .mega-menu { position:absolute; top:100%; left:-50%; width:500px; background:rgba(10,15,26,0.95); backdrop-filter:blur(20px); border:1px solid var(--glass-border); border-radius:0 0 24px 24px; padding:2rem; display:none; grid-template-columns:1fr 1fr; gap:1.5rem; z-index:1001; box-shadow:var(--glass-shadow); }
+        .nav-item:hover .mega-menu { display:grid; animation:fadeIn 0.3s ease; }
+        .mega-item { padding:1rem; border-radius:16px; transition:var(--transition-smooth); }
+        .mega-item:hover { background:rgba(212,175,55,0.1); }
+        .mega-item a { color:var(--text-light); text-decoration:none; display:flex; flex-direction:column; gap:0.5rem; }
+        .mega-item i { color:var(--gold-primary); font-size:2rem; margin-bottom:0.5rem; }
+        .mega-item span { font-size:1.2rem; font-weight:600; font-family:var(--font-serif); }
+        .mega-item small { color:var(--text-dim); font-size:0.9rem; }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(-20px);} to{opacity:1; transform:translateY(0);} }
+        .page-header { margin-top:100px; padding:4rem 2rem; text-align:center; background:linear-gradient(135deg,#0A0F1A,#151E2C); border-bottom:1px solid var(--glass-border); }
+        .page-header h1 { font-size:4rem; margin-bottom:1rem; }
+        .page-header p { color:var(--text-dim); max-width:700px; margin:0 auto; }
+        .sub-nav { background:rgba(10,15,26,0.8); backdrop-filter:blur(10px); padding:1rem 2rem; display:flex; justify-content:center; gap:3rem; border-bottom:1px solid var(--glass-border); position:sticky; top:80px; z-index:99; }
+        .sub-nav a { color:var(--text-dim); text-decoration:none; font-weight:500; text-transform:uppercase; letter-spacing:1px; padding:0.5rem 0; border-bottom:2px solid transparent; transition:var(--transition-smooth); }
+        .sub-nav a:hover, .sub-nav a.active { color:var(--gold-primary); border-bottom-color:var(--gold-primary); }
+        .content-container { max-width:1400px; margin:4rem auto; padding:0 2rem; }
+        .section-title { font-size:2.5rem; margin-bottom:3rem; border-left:4px solid var(--gold-primary); padding-left:2rem; }
+        .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+        .card { background:var(--bg-card); backdrop-filter:blur(12px); border:1px solid var(--glass-border); border-radius:24px; overflow:hidden; transition:var(--transition-smooth); height:100%; }
+        .card:hover { transform:translateY(-10px); border-color:var(--gold-primary); box-shadow:0 30px 60px -15px rgba(212,175,55,0.3); }
+        .card-image { height:250px; width:100%; position:relative; overflow:hidden; }
+        .image-placeholder { width:100%; height:100%; background:linear-gradient(145deg,#1E2636,#141B28); display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-dark); border:1px dashed var(--glass-border); }
+        .image-placeholder i { font-size:3rem; margin-bottom:0.5rem; color:var(--gold-dark); opacity:0.6; }
+        .image-placeholder span { background:rgba(0,0,0,0.3); padding:0.3rem 1rem; border-radius:30px; font-size:0.8rem; border:1px solid rgba(212,175,55,0.2); }
+        .card-badge { position:absolute; top:1rem; right:1rem; background:var(--gold-primary); color:var(--bg-deep); padding:0.5rem 1rem; border-radius:40px; font-size:0.8rem; display:flex; align-items:center; gap:0.5rem; z-index:2; }
+        .card-content { padding:2rem; }
+        .card-content h3 { font-size:1.8rem; margin-bottom:1rem; }
+        .card-meta { color:var(--gold-primary); font-size:0.9rem; margin-bottom:1rem; }
+        .card-description { color:var(--text-dim); margin-bottom:1.5rem; line-height:1.7; }
+        .card-link { color:var(--text-light); text-decoration:none; font-weight:600; text-transform:uppercase; letter-spacing:2px; font-size:0.9rem; display:inline-flex; align-items:center; gap:0.8rem; transition:gap 0.3s; border-bottom:1px solid transparent; padding-bottom:0.3rem; }
+        .card-link:hover { gap:1.5rem; color:var(--gold-primary); border-bottom-color:var(--gold-primary); }
+        .btn-sm { padding:0.6rem 1.2rem; border:2px solid var(--gold-primary); background:transparent; color:var(--text-light); font-weight:500; cursor:pointer; border-radius:40px; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; font-size:0.9rem; transition:var(--transition-smooth); }
+        .btn-sm:hover { background:var(--gold-primary); color:var(--bg-deep); }
+        .btn-primary-sm { background:var(--gold-primary); color:var(--bg-deep); border-color:var(--gold-primary); }
+        .btn-primary-sm:hover { background:#FFFFFF; border-color:#FFFFFF; }
+        .modal-3d { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; justify-content:center; align-items:center; }
+        .modal-3d.active { display:flex; }
+        .modal-content { width:90%; height:90%; background:var(--bg-deep); border:2px solid var(--gold-primary); border-radius:30px; position:relative; overflow:hidden; }
+        .close-modal { position:absolute; top:20px; right:30px; color:var(--text-light); font-size:3rem; cursor:pointer; z-index:10001; }
+        #viewer-canvas { width:100%; height:100%; }
+        footer { background:#05080F; padding:5rem 5rem 2rem; border-top:2px solid var(--gold-primary); }
+        .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 2fr; gap:4rem; margin-bottom:4rem; }
+        .footer-logo { font-size:2.2rem; font-family:var(--font-serif); font-weight:800; background:linear-gradient(135deg,#FFFFFF,var(--gold-primary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .footer-about p { color:var(--text-dim); line-height:1.8; }
+        .footer-links h4 { color:var(--gold-primary); margin-bottom:1.8rem; }
+        .footer-links ul { list-style:none; }
+        .footer-links li { margin-bottom:0.8rem; }
+        .footer-links a { color:var(--text-dim); text-decoration:none; transition:color 0.3s; }
+        .footer-links a:hover { color:var(--gold-primary); }
+        .newsletter-form { display:flex; gap:1rem; margin-top:1rem; }
+        .newsletter-form input { flex:1; padding:1rem; background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); color:var(--text-light); border-radius:50px; }
+        .newsletter-form button { padding:1rem 2rem; background:var(--gold-primary); border:none; color:var(--bg-deep); font-weight:600; cursor:pointer; border-radius:50px; transition:var(--transition-smooth); }
+        .newsletter-form button:hover { background:#FFFFFF; }
+        .copyright { text-align:center; padding-top:3rem; border-top:1px solid rgba(255,255,255,0.05); color:var(--text-dark); }
+        @media (max-width:1200px){ .grid-3{grid-template-columns:repeat(2,1fr);} .footer-grid{grid-template-columns:repeat(2,1fr);} }
+        @media (max-width:768px){ .grid-3{grid-template-columns:1fr;} .footer-grid{grid-template-columns:1fr;} .page-header h1{font-size:2.5rem;} }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="logo">ĐST's PROJECT</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Trang chủ</a></li>
+            <li class="nav-item">
+                <a href="chau-ban.html">CHƯƠNG I <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">Thời chúa Nguyễn (Thế kỉ XVII - XVIII)</span>
+                    </div>
+                    <div class="mega-item"><a href="doi-hoang-sa.html"><i class="fas fa-ship"></i><span>Hình thành đội Hoàng Sa</span><small>Đội dân binh khai thác</small></a></div>
+                    <div class="mega-item"><a href="doi-bac-hai.html"><i class="fas fa-water"></i><span>Hình thành đội Bắc Hải</span><small>Đội thuyền phía Bắc</small></a></div>
+                    <div class="mega-item" style="grid-column: span 2;"><a href="khong-gian-trung-bay.html"><i class="fas fa-archway"></i><span>Không gian trưng bày</span><small>Hiện vật và mô hình 3D</small></a></div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="chinh-su.html" class="active">CHƯƠNG II <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">Chính quyền Tây Sơn (1771 - 1802)</span>
+                    </div>
+                    <div class="mega-item"><a href="doi-hoang-sa-tay-son.html"><i class="fas fa-ship"></i><span>Duy trì đội Hoàng Sa (1786)</span><small>Tiếp quản và củng cố</small></a></div>
+                    <div class="mega-item"><a href="mo-rong-luc-luong.html" class="active"><i class="fas fa-expand-alt"></i><span>Mở rộng lực lượng</span><small>Đội Quế Hương, Đại Mạo, Hải Ba</small></a></div>
+                    <div class="mega-item" style="grid-column: span 2;"><a href="khong-gian-trung-bay-tay-son.html"><i class="fas fa-archway"></i><span>Không gian trưng bày</span><small>Hiện vật thời Tây Sơn</small></a></div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="tu-lieu.html">Tư liệu <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item"><a href="tu-lieu.html#phuong-tay"><i class="fas fa-globe-europe"></i><span>Phương Tây trước 1909</span><small>Bản đồ cổ</small></a></div>
+                    <div class="mega-item"><a href="tu-lieu.html#trung-quoc"><i class="fas fa-dragon"></i><span>Trung Quốc trước 1909</span><small>Đại Thanh nhất thống đồ</small></a></div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="page-header">
+        <h1>Mở rộng lực lượng <span class="gold-text">thủy quân</span></h1>
+        <p>Thời kỳ chính quyền Tây Sơn (1788 - 1802)</p>
+    </div>
+
+    <div class="sub-nav">
+        <a href="#gioi-thieu" class="active">Tổng quan</a>
+        <a href="#doi-que-huong">Đội Quế Hương</a>
+        <a href="#doi-dai-mao">Đội Đại Mạo</a>
+        <a href="#doi-hai-ba">Đội Hải Ba</a>
+    </div>
+
+    <div class="content-container">
+        <section id="gioi-thieu">
+            <h2 class="section-title">Mở rộng lực lượng dưới thời Quang Trung</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-image"><div class="image-placeholder"><i class="fas fa-chart-line"></i><span>Mở rộng thủy quân</span></div><span class="card-badge"><i class="fas fa-cube"></i> 3D</span></div>
+                    <div class="card-content">
+                        <h3>Mở rộng thủy quân Tây Sơn</h3>
+                        <div class="card-meta"><i class="far fa-calendar"></i> 1788-1792</div>
+                        <p class="card-description">Dưới thời vua Quang Trung, thủy quân Tây Sơn được tổ chức lại và mở rộng với nhiều đội thuyền mới, đáp ứng yêu cầu bảo vệ vùng biển rộng lớn.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image"><div class="image-placeholder"><i class="fas fa-ship"></i><span>Đội Quế Hương</span></div><span class="card-badge"><i class="fas fa-cube"></i> 3D</span></div>
+                    <div class="card-content">
+                        <h3>Đội Quế Hương</h3>
+                        <div class="card-meta"><i class="far fa-calendar"></i> Thành lập 1788</div>
+                        <p class="card-description">Đội thuyền hoạt động ở vùng biển Quảng Nam, Quảng Ngãi.</p>
+                        <a href="doi-que-huong.html" class="card-link">Tìm hiểu thêm <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image"><div class="image-placeholder"><i class="fas fa-water"></i><span>Đội Đại Mạo</span></div><span class="card-badge"><i class="fas fa-cube"></i> 3D</span></div>
+                    <div class="card-content">
+                        <h3>Đội Đại Mạo</h3>
+                        <div class="card-meta"><i class="far fa-calendar"></i> Thành lập 1790</div>
+                        <p class="card-description">Đội thuyền hoạt động ở vùng biển Bình Định, Phú Yên.</p>
+                        <a href="doi-dai-mao.html" class="card-link">Tìm hiểu thêm <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image"><div class="image-placeholder"><i class="fas fa-fish"></i><span>Đội Hải Ba</span></div><span class="card-badge"><i class="fas fa-cube"></i> 3D</span></div>
+                    <div class="card-content">
+                        <h3>Đội Hải Ba</h3>
+                        <div class="card-meta"><i class="far fa-calendar"></i> Thành lập 1792</div>
+                        <p class="card-description">Đội thuyền hoạt động ở vùng biển xa, chuyên khai thác hải sản.</p>
+                        <a href="doi-hai-ba.html" class="card-link">Tìm hiểu thêm <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-about"><div class="footer-logo">HSTT ARCHIVE</div><p>Bảo tàng Ảo về chủ quyền Hoàng Sa, Trường Sa.</p></div>
+            <div class="footer-links"><h4>Khám phá</h4><ul><li><a href="doi-hoang-sa.html">Đội Hoàng Sa</a></li><li><a href="doi-bac-hai.html">Đội Bắc Hải</a></li><li><a href="chinh-su.html">Chính quyền Tây Sơn</a></li><li><a href="tu-lieu.html">Tư liệu quốc tế</a></li><li><a href="virtual-tour.html">Tham quan ảo</a></li><li><a href="3d-map.html">Bản đồ 3D</a></li></ul></div>
+            <div class="footer-links"><h4>Về chúng tôi</h4><ul><li><a href="#">Giới thiệu</a></li><li><a href="#">Liên hệ</a></li></ul></div>
+            <div class="footer-newsletter"><h4>Nhận tin mới</h4><form class="newsletter-form"><input type="email" placeholder="Email"><button type="submit"><i class="fas fa-paper-plane"></i></button></form></div>
+        </div>
+        <div class="copyright"><p>&copy;Bảo tàng Ảo Hoàng Sa - Trường Sa.</p></div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        AOS.init();
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll',()=>{ if(window.scrollY>100) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); });
+        function open3DViewer(id){
+            const modal = document.getElementById('modal3d');
+            if(modal){
+                modal.classList.add('active');
+                const canvas = document.getElementById('viewer-canvas');
+                if(canvas){
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth/canvas.clientHeight, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+                    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+                    scene.background = new THREE.Color(0x0A0F1A);
+                    const geometry = new THREE.BoxGeometry(2,3,0.5);
+                    const material = new THREE.MeshStandardMaterial({ color:0xD4AF37 });
+                    const cube = new THREE.Mesh(geometry, material);
+                    scene.add(cube);
+                    camera.position.z = 5;
+                    const light = new THREE.DirectionalLight(0xffffff,1);
+                    light.position.set(5,5,5);
+                    scene.add(light);
+                    function animate(){ requestAnimationFrame(animate); cube.rotation.y+=0.01; renderer.render(scene,camera); }
+                    animate();
+                }
+            }
+        }
+        function close3DViewer(){ document.getElementById('modal3d').classList.remove('active'); }
+    </script>
+</body>
+</html>

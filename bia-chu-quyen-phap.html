@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bia Chủ Quyền Thời Pháp Thuộc | Bảo tàng Ảo</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #0a0f1a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            color: #D4AF37;
+            border: 1px solid #D4AF37;
+            padding: 10px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: #D4AF37;
+            color: #0a0f1a;
+        }
+        .title {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #D4AF37;
+            font-size: 1rem;
+            background: rgba(0,0,0,0.5);
+            padding: 8px;
+            backdrop-filter: blur(4px);
+            z-index: 10;
+        }
+        @media (max-width: 768px) {
+            .back-btn { font-size: 0.8rem; padding: 6px 12px; }
+            .title { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Quay lại</a>
+        <iframe src="https://ar.vr360.com.vn/view/066-mo-hinh-bia-chu-quyen-thoi-phap-duoc-xay-dung-tren-quan-dao-hoang-sa" allow="autoplay; fullscreen; vr" frameborder="0"></iframe>
+        <div class="title">Bia Chủ Quyền Thời Pháp Thuộc - Mô hình 3D | Bảo tàng Ảo</div>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

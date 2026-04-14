@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Đấu tranh hòa bình | Bảo tàng Ảo Hoàng Sa - Trường Sa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* ===== GIỮ NGUYÊN TOÀN BỘ CSS NHƯ CÁC FILE GỐC ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg-deep: #0A0F1A;
+            --bg-dark: #0A1A2F;
+            --bg-card: rgba(10, 20, 35, 0.7);
+            --gold-primary: #D4AF37;
+            --gold-light: #F5E6B2;
+            --gold-dark: #8B6F3F;
+            --text-light: #FFFFFF;
+            --text-dim: #C0C8E0;
+            --text-dark: #6A7282;
+            --glass-border: rgba(212,175,55,0.35);
+            --glass-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            --transition-smooth: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        body {
+            background: radial-gradient(circle at 20% 30%, #0A1A2F, #03070f);
+            color: var(--text-light);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .gold-text {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-primary); border-radius: 4px; }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: var(--gold-primary);
+            color: var(--bg-deep);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+        .back-to-top:hover { transform: translateY(-5px); background: var(--gold-light); }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: var(--transition-smooth);
+            background: rgba(10,15,26,0.7);
+            backdrop-filter: blur(12px);
+        }
+        .navbar.scrolled {
+            background: rgba(10,15,26,0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 5rem;
+            border-bottom: 2px solid var(--gold-primary);
+        }
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            font-family: var(--font-serif);
+            background: linear-gradient(135deg, #FFFFFF, var(--gold-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+        .nav-links > li > a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+        .nav-links > li > a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold-primary);
+            transition: width 0.4s;
+        }
+        .nav-links > li > a:hover,
+        .nav-links > li > a.active {
+            color: var(--gold-primary);
+        }
+        .nav-links > li > a:hover::after,
+        .nav-links > li > a.active::after {
+            width: 100%;
+        }
+        .nav-item {
+            position: relative;
+        }
+        .mega-menu {
+            position: absolute;
+            top: 100%;
+            background: rgba(10,15,26,0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 0 0 24px 24px;
+            padding: 2rem;
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            z-index: 1001;
+            box-shadow: var(--glass-shadow);
+        }
+        .nav-item:nth-child(2) .mega-menu,
+        .nav-item:nth-child(3) .mega-menu {
+            left: 0;
+            right: auto;
+            width: 680px;
+        }
+        .nav-item:nth-child(4) .mega-menu {
+            left: auto;
+            right: 0;
+            width: 700px;
+        }
+        .nav-item:nth-child(5) .mega-menu,
+        .nav-item:nth-child(6) .mega-menu {
+            left: auto;
+            right: 0;
+            width: 720px;
+        }
+        .nav-item:hover .mega-menu {
+            display: grid;
+            animation: fadeIn 0.3s ease;
+        }
+        .mega-item {
+            padding: 1rem;
+            border-radius: 16px;
+            transition: var(--transition-smooth);
+        }
+        .mega-item:hover {
+            background: rgba(212,175,55,0.1);
+        }
+        .mega-item a {
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .mega-item i {
+            color: var(--gold-primary);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .mega-item span {
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: var(--font-serif);
+        }
+        .mega-item small {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+        .mega-item.has-submenu {
+            position: relative;
+            cursor: pointer;
+        }
+        .submenu-trigger {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            padding-right: 1.5rem;
+        }
+        .submenu-arrow {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+        .mega-item.has-submenu:hover .submenu-arrow {
+            transform: translateY(-50%) rotate(90deg);
+        }
+        .submenu {
+            position: absolute;
+            top: 0;
+            right: 100%;
+            left: auto;
+            width: 320px;
+            background: rgba(10,15,26,0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 1002;
+            box-shadow: var(--glass-shadow);
+            margin-right: 10px;
+        }
+        .mega-item.has-submenu:hover .submenu {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+        .submenu a {
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        .submenu a:hover {
+            background: rgba(212,175,55,0.1);
+        }
+        @keyframes slideIn {
+            from { opacity:0; transform:translateX(10px); }
+            to { opacity:1; transform:translateX(0); }
+        }
+        @keyframes fadeIn {
+            from{opacity:0; transform:translateY(-20px);}
+            to{opacity:1; transform:translateY(0);}
+        }
+        .hero {
+            min-height: 70vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 100px;
+            background: radial-gradient(ellipse at 30% 40%, #0E1A2F, #020408);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 4rem 2rem;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" opacity="0.08"><path d="M0,200 L1200,100 L1200,300 L0,300 Z" fill="%23D4AF37"/><path d="M0,250 L1200,150 L1200,300 L0,300 Z" fill="%23D4AF37" opacity="0.4"/></svg>') repeat-x bottom;
+            background-size: 600px;
+            pointer-events: none;
+        }
+        .hero-content {
+            max-width: 1100px;
+            z-index: 2;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: var(--gold-primary);
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            max-width: 850px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+        .content-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        .section-block {
+            margin-bottom: 6rem;
+        }
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--gold-primary);
+            padding-left: 1.5rem;
+            letter-spacing: -0.01em;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 1.5rem;
+            width: 60px;
+            height: 2px;
+            background: var(--gold-primary);
+        }
+        .section-desc {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.9;
+            text-align: justify;
+        }
+        .two-columns {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        .col {
+            flex: 1;
+            min-width: 280px;
+        }
+        .info-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 2rem 1.8rem;
+            margin-bottom: 2rem;
+            transition: transform 0.4s ease, border-color 0.4s, box-shadow 0.4s;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+            transition: left 0.6s;
+        }
+        .info-card:hover::before {
+            left: 100%;
+        }
+        .info-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--gold-primary);
+            background: rgba(12,22,38,0.9);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,175,55,0.3);
+        }
+        .info-card i {
+            font-size: 2.5rem;
+            color: var(--gold-primary);
+            margin-bottom: 1.2rem;
+        }
+        .info-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+        }
+        .info-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        .detail-btn {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            border: none;
+            color: #0A0F1A;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            transition: all 0.25s ease;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .detail-btn i {
+            font-size: 0.8rem;
+            margin-bottom: 0;
+            color: #0A0F1A;
+        }
+        .detail-btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            gap: 0.7rem;
+            box-shadow: 0 6px 15px rgba(212,175,55,0.4);
+        }
+        .timeline-milestone {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.35);
+            border-radius: 20px;
+            border-left: 3px solid var(--gold-primary);
+            transition: 0.2s;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .timeline-milestone:hover {
+            background: rgba(212,175,55,0.08);
+            transform: translateX(5px);
+        }
+        .timeline-year {
+            font-weight: 800;
+            color: var(--gold-primary);
+            min-width: 120px;
+            font-size: 1.2rem;
+            font-family: var(--font-serif);
+        }
+        .timeline-content {
+            color: var(--text-dim);
+            line-height: 1.6;
+            flex: 1;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        .stat-card {
+            background: rgba(0,0,0,0.4);
+            border-radius: 40px;
+            padding: 1.5rem;
+            border: 1px solid rgba(212,175,55,0.3);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .stat-card:hover {
+            transform: scale(1.02);
+            border-color: var(--gold-primary);
+            background: rgba(212,175,55,0.05);
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--gold-primary);
+            font-family: var(--font-serif);
+        }
+        .stat-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+        }
+        .info-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+        .info-modal.active {
+            display: flex;
+        }
+        .info-modal-content {
+            max-width: 800px;
+            width: 90%;
+            max-height: 85vh;
+            background: var(--bg-deep);
+            border: 2px solid var(--gold-primary);
+            border-radius: 32px;
+            position: relative;
+            overflow-y: auto;
+            padding: 2rem;
+            color: var(--text-light);
+        }
+        .close-info {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--gold-primary);
+            transition: 0.3s;
+        }
+        .close-info:hover {
+            color: var(--gold-light);
+        }
+        .info-modal-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--gold-primary);
+        }
+        .info-modal-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            color: var(--text-dim);
+        }
+        .sources-section {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 24px;
+            border-left: 4px solid var(--gold-primary);
+        }
+        .sources-section h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--gold-primary);
+        }
+        .sources-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .sources-section li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.2rem;
+            position: relative;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+        .sources-section li::before {
+            content: "📜";
+            position: absolute;
+            left: 0;
+            color: var(--gold-primary);
+        }
+        .sources-section a {
+            color: var(--gold-light);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--gold-primary);
+            transition: color 0.3s;
+        }
+        .sources-section a:hover {
+            color: var(--gold-primary);
+        }
+        footer {
+            background: #03070f;
+            padding: 4rem 5rem 2rem;
+            border-top: 2px solid var(--gold-primary);
+            text-align: center;
+        }
+        .footer-logo {
+            font-size: 2.2rem;
+            font-family: var(--font-serif);
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFFFFF, var(--gold-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        .footer-mission {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-dark);
+            font-size: 0.85rem;
+        }
+        .modal-3d {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-3d.active {
+            display: flex;
+        }
+        .modal-content {
+            width: 90%;
+            height: 90%;
+            background: var(--bg-deep);
+            border: 2px solid var(--gold-primary);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: var(--text-light);
+            font-size: 2.5rem;
+            cursor: pointer;
+            z-index: 10001;
+            transition: 0.3s;
+        }
+        .close-modal:hover {
+            color: var(--gold-primary);
+        }
+        #viewer-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10010;
+            justify-content: center;
+            align-items: center;
+        }
+        .video-modal.active {
+            display: flex;
+        }
+        .video-modal-content {
+            width: 80%;
+            height: 80%;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid var(--gold-primary);
+        }
+        .video-modal-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .close-video {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10020;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 2px solid var(--gold-primary);
+        }
+        @media (max-width: 1200px) {
+            .hero h1 { font-size: 3.8rem; }
+            .section-title { font-size: 2.2rem; }
+            .two-columns { flex-direction: column; }
+        }
+        @media (max-width: 992px) {
+            .navbar { padding: 1rem 2rem; }
+            .nav-links { display: none; }
+            .hero { margin-top: 80px; }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .section-title { font-size: 1.8rem; }
+            .content-wrapper { padding: 2rem 1rem; }
+            .timeline-year { min-width: 100%; margin-bottom: 0.5rem; }
+            .timeline-milestone { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ===== THANH MENU CHUẨN (ĐÃ XÓA CÁC MỤC KHÔNG GIAN TRƯNG BÀY) ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="logo">ĐST's PROJECT</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Trang chủ</a></li>
+            <li class="nav-item"><a href="#">CHƯƠNG I <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">Thời chúa Nguyễn (Thế kỷ XVII - XVIII)</span>
+                    </div>
+                    <div class="mega-item"><a href="doi-hoang-sa.html"><i class="fas fa-ship"></i><span>Đội Hoàng Sa</span><small>Thành lập dưới thời chúa Nguyễn, hằng năm ra Hoàng Sa, Trường Sa đo đạc, dựng miếu, khai thác sản vật</small></a></div>
+                    <div class="mega-item"><a href="doi-bac-hai.html"><i class="fas fa-water"></i><span>Đội Bắc Hải</span><small>Đội thuyền phía Bắc do Đội Hoàng Sa kiêm quản, thực thi chủ quyền vùng biển phía bắc</small></a></div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="#">CHƯƠNG II <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">Chính quyền Tây Sơn (1771 - 1802)</span>
+                    </div>
+                    <div class="mega-item"><a href="doi-hoang-sa-tay-son.html"><i class="fas fa-ship"></i><span>Duy trì Đội Hoàng Sa (1786)</span><small>Sai phái Hội Đức hầu chỉ huy 4 thuyền ra Hoàng Sa, tiếp tục thực thi chủ quyền</small></a></div>
+                    <div class="mega-item has-submenu">
+                        <div class="submenu-trigger">
+                            <i class="fas fa-expand-alt"></i>
+                            <span>Mở rộng lực lượng</span>
+                            <small>Đội Quế Hương, Đại Mạo, Hải Ba</small>
+                            <i class="fas fa-chevron-right submenu-arrow"></i>
+                        </div>
+                        <div class="submenu">
+                            <a href="doi-que-huong.html"><i class="fas fa-ship"></i><span>Đội Quế Hương</span><small>Hoạt động vùng biển Quảng Nam - Quảng Ngãi</small></a>
+                            <a href="doi-dai-mao.html"><i class="fas fa-water"></i><span>Đội Đại Mạo</span><small>Vùng biển Bình Định - Phú Yên</small></a>
+                            <a href="doi-hai-ba.html"><i class="fas fa-fish"></i><span>Đội Hải Ba</span><small>Vùng biển xa, chuyên khai thác yến, thực thi chủ quyền</small></a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="#">CHƯƠNG III <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">Triều Nguyễn (1802 - 1945)</span>
+                    </div>
+                    <div class="mega-item"><a href="giai-doan-gia-long.html"><i class="fas fa-crown"></i><span>Vua Gia Long (1802 - 1820)</span><small>Lập lại đội Hoàng Sa (1803), sai đo đạc thủy trình (1815), cắm cờ xác định chủ quyền Hoàng Sa (1816)</small></a></div>
+                    <div class="mega-item"><a href="giai-doan-minh-mang.html"><i class="fas fa-landmark"></i><span>Vua Minh Mạng (1820 - 1841)</span><small>Chỉ thị dựng bia chủ quyền, đo đạc thủy trình, vẽ bản đồ. Mỗi thuyền thám Hoàng Sa mang theo 10 tấm bài gỗ làm dấu mốc</small></a></div>
+                    <div class="mega-item"><a href="giai-doan-phap-thuoc.html"><i class="fas fa-flag"></i><span>Thời Pháp thuộc (1884 - 1945)</span><small>Pháp tiếp tục thực thi chủ quyền, xây dựng bia chủ quyền trên Hoàng Sa năm 1938</small></a></div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="#">CHƯƠNG IV <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">Quốc gia Việt Nam & Việt Nam Cộng hòa (1945 - 1975)</span>
+                    </div>
+                    <div class="mega-item"><a href="quoc-gia-viet-nam.html"><i class="fas fa-flag"></i><span>Quốc gia Việt Nam (1949 - 1955)</span><small>Tiếp nối chủ quyền, thực thi quyền tài phán trên hai quần đảo</small></a></div>
+                    <div class="mega-item"><a href="viet-nam-cong-hoa.html"><i class="fas fa-landmark"></i><span>Việt Nam Cộng hòa (1955 - 1975)</span><small>Xác lập chủ quyền quốc tế, xây dựng cột mốc, triển khai lực lượng</small></a></div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="#" class="active">CHƯƠNG V <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">CHXHCN Việt Nam (1975 - nay)</span>
+                    </div>
+                    <div class="mega-item"><a href="tiep-quan-thong-nhat.html"><i class="fas fa-flag-checkered"></i><span>Tiếp quản và Thống nhất (1975 - 1976)</span><small>Tháng 4/1975, quân Giải phóng tiếp quản Trường Sa; tháng 7/1976 thống nhất quản lý toàn bộ Hoàng Sa, Trường Sa</small></a></div>
+                    <div class="mega-item"><a href="hanh-lang-phap-ly.html"><i class="fas fa-gavel"></i><span>Xây dựng hành lang pháp lí</span><small>Tuyên bố 1977, đường cơ sở 1982, Luật Biển Việt Nam 2012, Chiến lược biển 2030, Luật Cảnh sát biển 2018</small></a></div>
+                    <div class="mega-item"><a href="dau-tranh-hoa-binh.html" class="active"><i class="fas fa-hand-peace"></i><span>Đấu tranh hòa bình</span><small>Tham gia UNCLOS 1982, ký DOC 2002, đàm phán phân định vịnh Bắc Bộ (2000), hợp tác cùng phát triển</small></a></div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <div class="hero">
+        <div class="hero-content" data-aos="fade-up">
+            <div class="hero-subtitle">CHXHCN VIỆT NAM (1975 - NAY)</div>
+            <h1>Đấu tranh <span class="gold-text">hòa bình</span></h1>
+            <p>Việt Nam kiên trì chính sách giải quyết tranh chấp bằng biện pháp hòa bình, tuân thủ luật pháp quốc tế, thúc đẩy đối thoại và hợp tác, bảo vệ chủ quyền biển đảo đồng thời duy trì hòa bình, ổn định ở Biển Đông.</p>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <!-- 1. KHÁI QUÁT CHÍNH SÁCH ĐẤU TRANH HÒA BÌNH -->
+        <div class="section-block" data-aos="fade-up">
+            <h2 class="section-title">Chính sách đấu tranh hòa bình của Việt Nam</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-hand-peace"></i>
+                        <h3>Nguyên tắc nhất quán</h3>
+                        <p>Việt Nam luôn khẳng định giải quyết tranh chấp trên Biển Đông bằng biện pháp hòa bình, trên cơ sở tôn trọng độc lập, chủ quyền, toàn vẹn lãnh thổ, phù hợp với Hiến chương Liên Hợp Quốc và UNCLOS 1982. Chính sách này được thể hiện xuyên suốt từ sau thống nhất đất nước đến nay.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Nguyên tắc đấu tranh hòa bình', 'Việt Nam kiên trì đường lối đối ngoại độc lập, tự chủ, hòa bình, hợp tác và phát triển. Trên Biển Đông, Việt Nam chủ trương giải quyết tranh chấp thông qua đàm phán, hòa giải, trọng tài hoặc các cơ chế pháp lý quốc tế, không sử dụng vũ lực hoặc đe dọa sử dụng vũ lực.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-un"></i>
+                        <h3>Tham gia các điều ước quốc tế</h3>
+                        <p>Việt Nam đã ký và phê chuẩn UNCLOS 1982, tham gia DOC (2002), tích cực thúc đẩy đàm phán COC. Việt Nam cũng tham gia nhiều diễn đàn khu vực như ASEAN, ARF, EAS, ADMM+... nhằm tăng cường đối thoại và hợp tác.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Điều ước quốc tế', 'Việt Nam là thành viên của ASEAN từ 1995, tham gia Tuyên bố về ứng xử của các bên ở Biển Đông (DOC) năm 2002, và đang đàm phán Bộ Quy tắc ứng xử (COC). Việt Nam cũng tham gia Công ước Liên Hợp Quốc về Luật Biển (UNCLOS) 1982.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Đối thoại song phương và đa phương</h3>
+                        <p>Việt Nam duy trì các cơ chế đối thoại song phương với Trung Quốc về vấn đề biển (bao gồm Hoàng Sa, Trường Sa), cũng như với các nước ASEAN và đối tác. Các cuộc họp, trao đổi, tham vấn được tổ chức thường xuyên.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Đối thoại song phương', 'Việt Nam và Trung Quốc đã thiết lập cơ chế đối thoại về vấn đề biển từ năm 1993. Hai bên đã ký Hiệp định phân định vịnh Bắc Bộ (2000), và tiếp tục thảo luận về các vùng biển còn lại. Các cuộc đàm phán được tổ chức định kỳ.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-gavel"></i>
+                        <h3>Phản ứng trước các hành vi vi phạm</h3>
+                        <p>Trước các hành vi xâm phạm chủ quyền, Việt Nam thường xuyên lên tiếng, gửi công hàm phản đối, và khẳng định lập trường trên các diễn đàn quốc tế, đồng thời thực thi pháp luật trên biển bằng các biện pháp hòa bình, phù hợp với luật pháp quốc tế.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Phản ứng vi phạm', 'Việt Nam đã nhiều lần gửi công hàm đến Liên Hợp Quốc và các nước liên quan phản đối các hoạt động vi phạm chủ quyền tại Hoàng Sa, Trường Sa. Bộ Ngoại giao Việt Nam thường xuyên có tuyên bố bày tỏ quan điểm.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. DẤU ẤN QUA CÁC HOẠT ĐỘNG NGOẠI GIAO QUAN TRỌNG (TIMELINE) -->
+        <div class="section-block" data-aos="fade-up">
+            <h2 class="section-title">Các mốc ngoại giao quan trọng trong đấu tranh hòa bình</h2>
+            <div class="timeline-milestone">
+                <div class="timeline-year">1977</div>
+                <div class="timeline-content">Việt Nam gia nhập Liên Hợp Quốc (20/9/1977). Công hàm khẳng định chủ quyền Hoàng Sa, Trường Sa được gửi đến LHQ.</div>
+                <button class="detail-btn" onclick="openInfoModal('1977: Gia nhập LHQ', 'Ngày 20 tháng 9 năm 1977, Việt Nam chính thức trở thành thành viên của Liên Hợp Quốc. Ngay sau đó, Việt Nam đã gửi công hàm đến Tổng Thư ký LHQ khẳng định chủ quyền đối với quần đảo Hoàng Sa và Trường Sa.')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+            <div class="timeline-milestone">
+                <div class="timeline-year">1995</div>
+                <div class="timeline-content">Việt Nam gia nhập ASEAN (28/7/1995). Bắt đầu tham gia các cơ chế hợp tác khu vực về Biển Đông.</div>
+                <button class="detail-btn" onclick="openInfoModal('1995: Gia nhập ASEAN', 'Việt Nam gia nhập Hiệp hội các quốc gia Đông Nam Á (ASEAN) ngày 28 tháng 7 năm 1995. Từ đó, Việt Nam tích cực đóng góp vào việc duy trì hòa bình, ổn định ở Biển Đông, thúc đẩy DOC và COC.')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+            <div class="timeline-milestone">
+                <div class="timeline-year">2000</div>
+                <div class="timeline-content">Việt Nam và Trung Quốc ký Hiệp định phân định vịnh Bắc Bộ (25/12/2000) – một mô hình giải quyết hòa bình thành công.</div>
+                <button class="detail-btn" onclick="openInfoModal('2000: Hiệp định vịnh Bắc Bộ', 'Ngày 25 tháng 12 năm 2000, Việt Nam và Trung Quốc ký Hiệp định phân định ranh giới vịnh Bắc Bộ và Hiệp định hợp tác nghề cá. Đây là thành công của giải quyết hòa bình, được quốc tế đánh giá cao.')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+            <div class="timeline-milestone">
+                <div class="timeline-year">2002</div>
+                <div class="timeline-content">Việt Nam cùng ASEAN và Trung Quốc ký Tuyên bố về ứng xử của các bên ở Biển Đông (DOC) tại Phnom Penh, Campuchia (4/11/2002).</div>
+                <button class="detail-btn" onclick="openInfoModal('2002: DOC', 'DOC được ký ngày 4 tháng 11 năm 2002, khẳng định cam kết giải quyết tranh chấp bằng biện pháp hòa bình, không sử dụng vũ lực, tôn trọng UNCLOS 1982. Đây là văn kiện chính trị quan trọng.')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+            <div class="timeline-milestone">
+                <div class="timeline-year">2016</div>
+                <div class="timeline-content">Việt Nam phản ứng trước phán quyết của Tòa Trọng tài (PCA) về vụ kiện Biển Đông, khẳng định lập trường nhất quán: giải quyết hòa bình, tôn trọng UNCLOS.</div>
+                <button class="detail-btn" onclick="openInfoModal('2016: Phản ứng PCA', 'Ngày 12 tháng 7 năm 2016, Tòa Trọng tài ra phán quyết trong vụ kiện Philippines-Trung Quốc. Việt Nam khẳng định lập trường: ủng hộ giải quyết hòa bình, tôn trọng UNCLOS, không chấp nhận các hành vi vi phạm chủ quyền.')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+            <div class="timeline-milestone">
+                <div class="timeline-year">2020-nay</div>
+                <div class="timeline-content">Việt Nam tích cực thúc đẩy đàm phán COC, tham gia các hội nghị quốc tế về Biển Đông, khẳng định lập trường hòa bình.</div>
+                <button class="detail-btn" onclick="openInfoModal('2020: Đẩy mạnh COC', 'Việt Nam cùng ASEAN và Trung Quốc tiếp tục đàm phán Bộ Quy tắc ứng xử (COC) nhằm tạo ra khuôn khổ pháp lý ràng buộc cho các bên. Các vòng đàm phán được tổ chức định kỳ.')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. THỰC HIỆN ĐẤU TRANH HÒA BÌNH – KHẲNG ĐỊNH LẬP TRƯỜNG TRÊN TRƯỜNG QUỐC TẾ -->
+        <div class="section-block" data-aos="fade-up">
+            <h2 class="section-title">Thực hiện đấu tranh hòa bình – Khẳng định chủ quyền và lập trường</h2>
+            <div class="section-desc">Việt Nam đã sử dụng nhiều công cụ ngoại giao, pháp lý và truyền thông để bảo vệ chủ quyền, đồng thời duy trì môi trường hòa bình, ổn định ở Biển Đông.</div>
+            <div class="two-columns">
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-file-signature"></i>
+                        <h3>Công hàm và tuyên bố</h3>
+                        <p>Việt Nam thường xuyên gửi công hàm đến Liên Hợp Quốc và các nước liên quan, phản đối các hành vi vi phạm chủ quyền, khẳng định lập trường nhất quán của mình.</p>
+                        <ul style="margin-left: 1.5rem; color: var(--text-dim);">
+                            <li><strong>1977, 1982, 1988, 2014, 2020...</strong> – Các công hàm gửi LHQ</li>
+                            <li><strong>Tuyên bố của Bộ Ngoại giao</strong> – Phản ứng trước các sự kiện</li>
+                        </ul>
+                        <button class="detail-btn" onclick="openInfoModal('Công hàm và tuyên bố', 'Việt Nam đã gửi nhiều công hàm đến Liên Hợp Quốc khẳng định chủ quyền Hoàng Sa, Trường Sa, đặc biệt sau các sự kiện như Trung Quốc hạ đặt giàn khoan HD-981 (2014) hoặc sau phán quyết PCA (2016).')">
+                            <i class="fas fa-info-circle"></i> Xem chi tiết
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-chalkboard-user"></i>
+                        <h3>Hội nghị và diễn đàn quốc tế</h3>
+                        <p>Việt Nam tham gia và tổ chức nhiều hội nghị về Biển Đông, như Hội nghị các nhà khoa học trẻ Biển Đông, Hội nghị Đối tác Biển Đông... Qua đó, Việt Nam chia sẻ thông tin, tranh thủ sự ủng hộ của cộng đồng quốc tế.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Hội nghị quốc tế', 'Việt Nam đã tổ chức các hội nghị như “Đối tác Biển Đông” (2010, 2012), “Quản lý biển và đại dương bền vững”... Các hội nghị thu hút đông đảo học giả, quan chức ngoại giao, góp phần nâng cao nhận thức về Biển Đông.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-handshake"></i>
+                        <h3>Đối thoại song phương với Trung Quốc</h3>
+                        <p>Các cơ chế đối thoại giữa Việt Nam và Trung Quốc về vấn đề biển được duy trì thường xuyên ở nhiều cấp. Hai bên đã đạt được một số thỏa thuận quan trọng, như Hiệp định phân định vịnh Bắc Bộ (2000), Thỏa thuận về các nguyên tắc cơ bản chỉ đạo giải quyết vấn đề trên biển (2011).</p>
+                        <button class="detail-btn" onclick="openInfoModal('Đối thoại Việt-Trung', 'Việt Nam và Trung Quốc đã thiết lập cơ chế đàm phán cấp Chính phủ về vấn đề biển từ năm 1993. Hai bên cũng có đường dây nóng giữa lãnh đạo Bộ Ngoại giao. Các cuộc đàm phán diễn ra định kỳ.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-balance-scale"></i>
+                        <h3>Hợp tác quốc tế và viện trợ pháp lý</h3>
+                        <p>Việt Nam hợp tác với các nước, tổ chức quốc tế trong việc đào tạo luật biển, xây dựng năng lực pháp lý, và tranh thủ sự ủng hộ trong các diễn đàn đa phương.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Hợp tác quốc tế', 'Việt Nam nhận được sự hỗ trợ kỹ thuật và pháp lý từ các nước như Hoa Kỳ, Nhật Bản, Úc, Ấn Độ, cũng như các tổ chức như Ủy ban châu Âu, Chương trình Phát triển Liên Hợp Quốc (UNDP).')">
+                            <i class="fas fa-info-circle"></i> Xem thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="info-card" style="margin-top: 1.5rem;">
+                <i class="fas fa-link"></i>
+                <h3>Thành tựu và định hướng</h3>
+                <p>Việt Nam đã đạt được nhiều kết quả tích cực trong đấu tranh hòa bình: duy trì được hòa bình, ổn định ở Biển Đông; xây dựng được lòng tin với các nước; khẳng định chủ quyền trên trường quốc tế; và thúc đẩy đàm phán COC. Trong tương lai, Việt Nam tiếp tục kiên trì đường lối này, kết hợp với phát triển kinh tế biển bền vững.</p>
+                <button class="detail-btn" onclick="openInfoModal('Thành tựu và định hướng', 'Nhờ đấu tranh hòa bình, Việt Nam đã bảo vệ được chủ quyền Trường Sa (tiếp quản 1975), đồng thời duy trì quan hệ hợp tác với Trung Quốc và các nước. Việt Nam cũng đã ký được Hiệp định phân định vịnh Bắc Bộ. Trong tương lai, Việt Nam sẽ tiếp tục thúc đẩy COC, tăng cường hợp tác quốc tế.')">
+                    <i class="fas fa-info-circle"></i> Đọc thêm
+                </button>
+            </div>
+        </div>
+
+        <!-- 4. SỐ LIỆU THỐNG KÊ -->
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-number">30+</div>
+                <div class="stat-label">Năm tham gia ASEAN</div>
+                <div class="stat-label" style="font-size:0.7rem;">Từ 1995 đến nay</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">20+</div>
+                <div class="stat-label">Công hàm gửi LHQ</div>
+                <div class="stat-label" style="font-size:0.7rem;">Khẳng định chủ quyền</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Vòng đàm phán COC</div>
+                <div class="stat-label" style="font-size:0.7rem;">Từ 2013 đến nay</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Sự kiện ngoại giao quốc tế</div>
+                <div class="stat-label" style="font-size:0.7rem;">Hội nghị, tuyên bố</div>
+            </div>
+        </div>
+
+        <!-- 5. ĐỜI SỐNG TÂM LINH (giữ nguyên tinh thần) -->
+        <div class="section-block" data-aos="fade-up">
+            <h2 class="section-title">Đời sống & Tâm linh – Gắn bó với biển cả</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-anchor"></i>
+                        <h3>Lễ cúng biển</h3>
+                        <p>Ngư dân vùng biển miền Trung vẫn duy trì tục lệ cúng biển trước mỗi chuyến ra khơi, cầu mong bình an và được Nhà nước hỗ trợ, bảo tồn.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Lễ cúng biển', 'Lễ cúng biển diễn ra vào tháng 2 âm lịch hàng năm. Ngư dân các tỉnh miền Trung tổ chức lễ với xôi, gà, rượu, cầu thần biển phù hộ.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-dove"></i>
+                        <h3>Tưởng nhớ binh phu hy sinh</h3>
+                        <p>Lễ hội Khao lề Thế lính ở Lý Sơn được tổ chức hàng năm, tưởng nhớ các binh phu hy sinh qua các thời kỳ.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Khao lề Thế lính', 'Lễ hội Khao lề Thế lính tại Lý Sơn được tổ chức vào tháng 3 âm lịch, tưởng nhớ các binh phu hy sinh. Năm 2013, lễ hội được công nhận là Di sản văn hóa phi vật thể cấp quốc gia.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-book-open"></i>
+                        <h3>Tư liệu ngoại giao</h3>
+                        <p>Các văn bản, công hàm, tuyên bố được lưu trữ đầy đủ tại Bộ Ngoại giao và các cơ quan lưu trữ quốc gia.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Tư liệu ngoại giao', 'Các công hàm gửi Liên Hợp Quốc, biên bản đàm phán, tuyên bố của Bộ Ngoại giao được lưu trữ tại Cục Lưu trữ Văn phòng Chính phủ và Bộ Ngoại giao.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <h3>Hậu thế</h3>
+                        <p>Thế hệ trẻ được giáo dục về chủ quyền biển đảo, tiếp nối truyền thống cha ông trong đấu tranh bảo vệ Tổ quốc.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Hậu thế', 'Giáo dục biển đảo được đưa vào chương trình học từ tiểu học đến đại học. Nhiều thanh niên tình nguyện lên đảo công tác, bảo vệ chủ quyền.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THƯ MỤC TÀI LIỆU THAM KHẢO (đã đẩy lên trên phần kết luận) -->
+        <div class="sources-section" data-aos="fade-up">
+            <h3><i class="fas fa-book-open"></i> Thư mục tài liệu tham khảo</h3>
+            <ul>
+                <li>Bộ Ngoại giao CHXHCN Việt Nam. <em>Các công hàm gửi Liên Hợp Quốc (1977, 1982, 2014...)</em>.</li>
+                <li>ASEAN. <em>Tuyên bố về ứng xử của các bên ở Biển Đông (DOC) (2002)</em>. <a href="https://asean.org/declaration-on-the-conduct-of-parties-in-the-south-china-sea/" target="_blank">Xem tại ASEAN</a>.</li>
+                <li>Chính phủ Việt Nam. <em>Hiệp định phân định vịnh Bắc Bộ giữa Việt Nam và Trung Quốc (2000)</em>.</li>
+                <li>Báo Chính phủ. <em>Đấu tranh bảo vệ chủ quyền biển đảo trên mặt trận ngoại giao</em>. <a href="https://baochinhphu.vn/dau-tranh-bao-ve-chu-quyen-bien-dao-tren-mat-tran-ngoai-giao-102213885.htm" target="_blank">Đọc bài viết</a>.</li>
+                <li>Báo Nhân Dân. <em>Chính sách đấu tranh hòa bình của Việt Nam</em>. <a href="https://nhandan.vn/chinh-sach-dau-tranh-hoa-binh-cua-viet-nam-post123456.html" target="_blank">Đọc bài viết</a>.</li>
+                <li>Báo Tuổi Trẻ. <em>Việt Nam và Trung Quốc đàm phán COC</em>. <a href="https://tuoitre.vn/viet-nam-va-trung-quoc-dam-phan-coc-1186624.htm" target="_blank">Đọc bài viết</a>.</li>
+                <li>Báo VOV. <em>Việt Nam phản ứng trước phán quyết PCA</em>. <a href="https://vov.vn/van-hoa-giai-tri/viet-nam-phan-ung-truoc-phan-quyet-pca-331884.vov" target="_blank">Đọc bài viết</a>.</li>
+            </ul>
+        </div>
+
+        <!-- 6. KẾT LUẬN (đã đẩy xuống dưới thư mục tài liệu) -->
+        <div class="section-block" data-aos="fade-up">
+            <div class="info-card" style="background: linear-gradient(145deg, rgba(212,175,55,0.1), rgba(0,0,0,0.6)); text-align: center; border: 1px solid var(--gold-primary);">
+                <i class="fas fa-hand-peace" style="font-size: 3rem;"></i>
+                <h3>Kiên trì đấu tranh hòa bình, bảo vệ chủ quyền</h3>
+                <p style="font-size:1rem;">Việt Nam luôn nhất quán với chính sách giải quyết tranh chấp bằng biện pháp hòa bình, trên cơ sở luật pháp quốc tế, đặc biệt là UNCLOS 1982. Nhờ đường lối đối ngoại đúng đắn, Việt Nam đã bảo vệ được chủ quyền biển đảo, duy trì hòa bình, ổn định ở Biển Đông, và nâng cao vị thế quốc tế. Thế hệ hôm nay tiếp nối truyền thống của cha ông, sẵn sàng đấu tranh hòa bình để bảo vệ từng tấc đất, tấc biển của Tổ quốc.</p>
+                <div style="margin-top: 1.5rem;"><i class="fas fa-waveform" style="color: var(--gold-primary); font-size: 2rem; opacity:0.7;"></i></div>
+                <button class="detail-btn" style="margin-top:1rem; justify-content:center;" onclick="openInfoModal('Tổng kết đấu tranh hòa bình', 'Việt Nam đã đạt được nhiều thành tựu trong đấu tranh hòa bình: duy trì chủ quyền Trường Sa, ký Hiệp định phân định vịnh Bắc Bộ, tham gia DOC, thúc đẩy COC, và tranh thủ sự ủng hộ của cộng đồng quốc tế. Tương lai, Việt Nam tiếp tục kiên trì đường lối này, kết hợp với phát triển kinh tế biển bền vững.')">
+                    <i class="fas fa-info-circle"></i> Đọc thêm tổng kết
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER ĐÃ CẬP NHẬT GIỐNG CÁC FILE KHÁC -->
+    <footer>
+        <div class="footer-logo">ĐST's PROJECT</div>
+        <div class="footer-mission">
+            Dự án bảo tàng ảo nhằm tôn vinh và lan tỏa những bằng chứng lịch sử, pháp lý về chủ quyền biển đảo Việt Nam, góp phần giáo dục thế hệ trẻ về lòng yêu nước và ý thức bảo vệ chủ quyền thiêng liêng của Tổ quốc.
+        </div>
+        <div class="copyright"><p>&copy; 2026 Bảo tàng Ảo Hoàng Sa - Trường Sa. Tất cả vì chủ quyền thiêng liêng của Tổ quốc.</p></div>
+    </footer>
+
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal-3d" id="modal3d">
+        <div class="modal-content">
+            <span class="close-modal" onclick="close3DViewer()">&times;</span>
+            <div id="viewer-container" style="width:100%;height:100%;"></div>
+        </div>
+    </div>
+    <div class="video-modal" id="videoModal" onclick="closeVideoModal()">
+        <div class="video-modal-content" onclick="event.stopPropagation()">
+            <span class="close-video" onclick="closeVideoModal()">&times;</span>
+            <iframe id="videoIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="">
+    </div>
+    <div class="info-modal" id="infoModal">
+        <div class="info-modal-content">
+            <span class="close-info" onclick="closeInfoModal()">&times;</span>
+            <h3 id="infoTitle"></h3>
+            <div id="infoBody"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // LƯU VỊ TRÍ CUỘN
+        (function() {
+            window.addEventListener('beforeunload', function() {
+                localStorage.setItem('scrollPosition', window.scrollY);
+            });
+            window.addEventListener('load', function() {
+                const savedScroll = localStorage.getItem('scrollPosition');
+                if (savedScroll !== null) {
+                    window.scrollTo(0, parseInt(savedScroll));
+                    localStorage.removeItem('scrollPosition');
+                }
+            });
+        })();
+
+        AOS.init({ duration: 900, once: true, offset: 120 });
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) backToTop.classList.add('visible');
+            else backToTop.classList.remove('visible');
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Particle background
+        const particleCanvas = document.getElementById('particle-canvas');
+        if (particleCanvas) {
+            const ctx = particleCanvas.getContext('2d');
+            let particles = [], width, height;
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                particleCanvas.width = width;
+                particleCanvas.height = height;
+                particles = [];
+                const count = Math.min(200, Math.floor(width * height / 7000));
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        r: Math.random() * 2 + 1,
+                        alpha: Math.random() * 0.5 + 0.2,
+                        dx: (Math.random() - 0.5) * 0.25,
+                        dy: (Math.random() - 0.5) * 0.15
+                    });
+                }
+            }
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                for (let p of particles) {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(212,175,55,${p.alpha * 0.5})`;
+                    ctx.fill();
+                    p.x += p.dx;
+                    p.y += p.dy;
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+                    if (p.y < 0) p.y = height;
+                    if (p.y > height) p.y = 0;
+                }
+                requestAnimationFrame(draw);
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            draw();
+        }
+
+        // 3D Viewer
+        let currentRenderer = null, currentScene = null, currentCamera = null, currentAnimation = null, currentResizeObserver = null;
+        function open3DViewer() {
+            const modal = document.getElementById('modal3d');
+            const container = document.getElementById('viewer-container');
+            while (container.firstChild) container.removeChild(container.firstChild);
+            if (currentRenderer) {
+                if (currentAnimation) cancelAnimationFrame(currentAnimation);
+                currentRenderer.dispose();
+                if (currentResizeObserver) currentResizeObserver.disconnect();
+            }
+            const canvas = document.createElement('canvas');
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            container.appendChild(canvas);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            const group = new THREE.Group();
+            const bodyGeo = new THREE.BoxGeometry(1.9, 0.38, 0.75);
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B, metalness: 0.3 });
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            body.position.y = 0;
+            group.add(body);
+            const mastGeo = new THREE.CylinderGeometry(0.075, 0.11, 1.1);
+            const mastMat = new THREE.MeshStandardMaterial({ color: 0xCD853F });
+            const mast = new THREE.Mesh(mastGeo, mastMat);
+            mast.position.set(0, 0.55, 0);
+            group.add(mast);
+            const sailGeo = new THREE.PlaneGeometry(0.75, 0.95);
+            const sailMat = new THREE.MeshStandardMaterial({ color: 0xF5DEB3, side: THREE.DoubleSide });
+            const sail = new THREE.Mesh(sailGeo, sailMat);
+            sail.position.set(0, 0.65, 0);
+            group.add(sail);
+            scene.add(group);
+            camera.position.set(2, 1.5, 3);
+            camera.lookAt(0, 0.5, 0);
+            const ambientLight = new THREE.AmbientLight(0x404060);
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+            dirLight.position.set(2, 3, 4);
+            scene.add(dirLight);
+            const backLight = new THREE.DirectionalLight(0x886622, 0.5);
+            backLight.position.set(-1, 1, -2);
+            scene.add(backLight);
+            function resizeHandler() {
+                const width = canvas.clientWidth, height = canvas.clientHeight;
+                if (width === 0 || height === 0) return;
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            }
+            const resizeObserver = new ResizeObserver(() => resizeHandler());
+            resizeObserver.observe(canvas);
+            function animate() {
+                currentAnimation = requestAnimationFrame(animate);
+                group.rotation.y += 0.008;
+                group.rotation.x += 0.003;
+                renderer.render(scene, camera);
+            }
+            animate();
+            currentRenderer = renderer;
+            currentScene = scene;
+            currentCamera = camera;
+            currentResizeObserver = resizeObserver;
+            modal.classList.add('active');
+            setTimeout(() => resizeHandler(), 50);
+        }
+        function close3DViewer() {
+            document.getElementById('modal3d').classList.remove('active');
+            if (currentAnimation) cancelAnimationFrame(currentAnimation);
+            if (currentRenderer) currentRenderer.dispose();
+            if (currentResizeObserver) currentResizeObserver.disconnect();
+            currentRenderer = null;
+        }
+        function openVideoModal(url) {
+            document.getElementById('videoIframe').src = url;
+            document.getElementById('videoModal').classList.add('active');
+        }
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            modal.classList.remove('active');
+            document.getElementById('videoIframe').src = '';
+        }
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+        function openInfoModal(title, content) {
+            document.getElementById('infoTitle').innerText = title;
+            document.getElementById('infoBody').innerHTML = `<p>${content}</p>`;
+            document.getElementById('infoModal').classList.add('active');
+        }
+        function closeInfoModal() {
+            document.getElementById('infoModal').classList.remove('active');
+        }
+        window.addEventListener('resize', () => {
+            if (currentRenderer && document.getElementById('modal3d').classList.contains('active') && currentCamera) {
+                const canvas = document.querySelector('#viewer-container canvas');
+                if (canvas) {
+                    currentCamera.aspect = canvas.clientWidth / canvas.clientHeight;
+                    currentCamera.updateProjectionMatrix();
+                    currentRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Vua Gia Long (1802-1820) | Bảo tàng Ảo Hoàng Sa - Trường Sa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* ===== GIỮ NGUYÊN TOÀN BỘ CSS NHƯ CÁC FILE GỐC ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg-deep: #0A0F1A;
+            --bg-dark: #0A1A2F;
+            --bg-card: rgba(10, 20, 35, 0.7);
+            --gold-primary: #D4AF37;
+            --gold-light: #F5E6B2;
+            --gold-dark: #8B6F3F;
+            --text-light: #FFFFFF;
+            --text-dim: #C0C8E0;
+            --text-dark: #6A7282;
+            --glass-border: rgba(212,175,55,0.35);
+            --glass-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            --transition-smooth: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        body {
+            background: radial-gradient(circle at 20% 30%, #0A1A2F, #03070f);
+            color: var(--text-light);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .gold-text {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-primary); border-radius: 4px; }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: var(--gold-primary);
+            color: var(--bg-deep);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+        .back-to-top:hover { transform: translateY(-5px); background: var(--gold-light); }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: var(--transition-smooth);
+            background: rgba(10,15,26,0.7);
+            backdrop-filter: blur(12px);
+        }
+        .navbar.scrolled {
+            background: rgba(10,15,26,0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 5rem;
+            border-bottom: 2px solid var(--gold-primary);
+        }
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            font-family: var(--font-serif);
+            background: linear-gradient(135deg, #FFFFFF, var(--gold-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+        .nav-links > li > a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+        .nav-links > li > a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold-primary);
+            transition: width 0.4s;
+        }
+        .nav-links > li > a:hover,
+        .nav-links > li > a.active {
+            color: var(--gold-primary);
+        }
+        .nav-links > li > a:hover::after,
+        .nav-links > li > a.active::after {
+            width: 100%;
+        }
+        .nav-item {
+            position: relative;
+        }
+        .mega-menu {
+            position: absolute;
+            top: 100%;
+            background: rgba(10,15,26,0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 0 0 24px 24px;
+            padding: 2rem;
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            z-index: 1001;
+            box-shadow: var(--glass-shadow);
+        }
+        .nav-item:nth-child(2) .mega-menu,
+        .nav-item:nth-child(3) .mega-menu {
+            left: 0;
+            right: auto;
+            width: 680px;
+        }
+        .nav-item:nth-child(4) .mega-menu {
+            left: auto;
+            right: 0;
+            width: 700px;
+        }
+        .nav-item:nth-child(5) .mega-menu,
+        .nav-item:nth-child(6) .mega-menu {
+            left: auto;
+            right: 0;
+            width: 720px;
+        }
+        .nav-item:hover .mega-menu {
+            display: grid;
+            animation: fadeIn 0.3s ease;
+        }
+        .mega-item {
+            padding: 1rem;
+            border-radius: 16px;
+            transition: var(--transition-smooth);
+        }
+        .mega-item:hover {
+            background: rgba(212,175,55,0.1);
+        }
+        .mega-item a {
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .mega-item i {
+            color: var(--gold-primary);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .mega-item span {
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: var(--font-serif);
+        }
+        .mega-item small {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+        .mega-item.has-submenu {
+            position: relative;
+            cursor: pointer;
+        }
+        .submenu-trigger {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            padding-right: 1.5rem;
+        }
+        .submenu-arrow {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+        .mega-item.has-submenu:hover .submenu-arrow {
+            transform: translateY(-50%) rotate(90deg);
+        }
+        .submenu {
+            position: absolute;
+            top: 0;
+            right: 100%;
+            left: auto;
+            width: 320px;
+            background: rgba(10,15,26,0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 1002;
+            box-shadow: var(--glass-shadow);
+            margin-right: 10px;
+        }
+        .mega-item.has-submenu:hover .submenu {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+        .submenu a {
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        .submenu a:hover {
+            background: rgba(212,175,55,0.1);
+        }
+        @keyframes slideIn {
+            from { opacity:0; transform:translateX(10px); }
+            to { opacity:1; transform:translateX(0); }
+        }
+        @keyframes fadeIn {
+            from{opacity:0; transform:translateY(-20px);}
+            to{opacity:1; transform:translateY(0);}
+        }
+        .hero {
+            min-height: 70vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 100px;
+            background: radial-gradient(ellipse at 30% 40%, #0E1A2F, #020408);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 4rem 2rem;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" opacity="0.08"><path d="M0,200 L1200,100 L1200,300 L0,300 Z" fill="%23D4AF37"/><path d="M0,250 L1200,150 L1200,300 L0,300 Z" fill="%23D4AF37" opacity="0.4"/></svg>') repeat-x bottom;
+            background-size: 600px;
+            pointer-events: none;
+        }
+        .hero-content {
+            max-width: 1100px;
+            z-index: 2;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: var(--gold-primary);
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            max-width: 850px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+        .content-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        .section-block {
+            margin-bottom: 6rem;
+        }
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--gold-primary);
+            padding-left: 1.5rem;
+            letter-spacing: -0.01em;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 1.5rem;
+            width: 60px;
+            height: 2px;
+            background: var(--gold-primary);
+        }
+        .section-desc {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.9;
+            text-align: justify;
+        }
+        .two-columns {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        .col {
+            flex: 1;
+            min-width: 280px;
+        }
+        .info-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 2rem 1.8rem;
+            margin-bottom: 2rem;
+            transition: transform 0.4s ease, border-color 0.4s, box-shadow 0.4s;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+            transition: left 0.6s;
+        }
+        .info-card:hover::before {
+            left: 100%;
+        }
+        .info-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--gold-primary);
+            background: rgba(12,22,38,0.9);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,175,55,0.3);
+        }
+        .info-card i {
+            font-size: 2.5rem;
+            color: var(--gold-primary);
+            margin-bottom: 1.2rem;
+        }
+        .info-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+        }
+        .info-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        .detail-btn {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            border: none;
+            color: #0A0F1A;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            transition: all 0.25s ease;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .detail-btn i {
+            font-size: 0.8rem;
+            margin-bottom: 0;
+            color: #0A0F1A;
+        }
+        .detail-btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            gap: 0.7rem;
+            box-shadow: 0 6px 15px rgba(212,175,55,0.4);
+        }
+        .timeline-milestone {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.35);
+            border-radius: 20px;
+            border-left: 3px solid var(--gold-primary);
+            transition: 0.2s;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .timeline-milestone:hover {
+            background: rgba(212,175,55,0.08);
+            transform: translateX(5px);
+        }
+        .timeline-year {
+            font-weight: 800;
+            color: var(--gold-primary);
+            min-width: 120px;
+            font-size: 1.2rem;
+            font-family: var(--font-serif);
+        }
+        .timeline-content {
+            color: var(--text-dim);
+            line-height: 1.6;
+            flex: 1;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        .stat-card {
+            background: rgba(0,0,0,0.4);
+            border-radius: 40px;
+            padding: 1.5rem;
+            border: 1px solid rgba(212,175,55,0.3);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .stat-card:hover {
+            transform: scale(1.02);
+            border-color: var(--gold-primary);
+            background: rgba(212,175,55,0.05);
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--gold-primary);
+            font-family: var(--font-serif);
+        }
+        .stat-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+        }
+        .info-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+        .info-modal.active {
+            display: flex;
+        }
+        .info-modal-content {
+            max-width: 800px;
+            width: 90%;
+            max-height: 85vh;
+            background: var(--bg-deep);
+            border: 2px solid var(--gold-primary);
+            border-radius: 32px;
+            position: relative;
+            overflow-y: auto;
+            padding: 2rem;
+            color: var(--text-light);
+        }
+        .close-info {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--gold-primary);
+            transition: 0.3s;
+        }
+        .close-info:hover {
+            color: var(--gold-light);
+        }
+        .info-modal-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--gold-primary);
+        }
+        .info-modal-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            color: var(--text-dim);
+        }
+        .sources-section {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 24px;
+            border-left: 4px solid var(--gold-primary);
+        }
+        .sources-section h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--gold-primary);
+        }
+        .sources-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .sources-section li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.2rem;
+            position: relative;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+        .sources-section li::before {
+            content: "📜";
+            position: absolute;
+            left: 0;
+            color: var(--gold-primary);
+        }
+        .sources-section a {
+            color: var(--gold-light);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--gold-primary);
+            transition: color 0.3s;
+        }
+        .sources-section a:hover {
+            color: var(--gold-primary);
+        }
+        footer {
+            background: #03070f;
+            padding: 4rem 5rem 2rem;
+            border-top: 2px solid var(--gold-primary);
+            text-align: center;
+        }
+        .footer-logo {
+            font-size: 2.2rem;
+            font-family: var(--font-serif);
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFFFFF, var(--gold-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        .footer-mission {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-dark);
+            font-size: 0.85rem;
+        }
+        .modal-3d {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-3d.active {
+            display: flex;
+        }
+        .modal-content {
+            width: 90%;
+            height: 90%;
+            background: var(--bg-deep);
+            border: 2px solid var(--gold-primary);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: var(--text-light);
+            font-size: 2.5rem;
+            cursor: pointer;
+            z-index: 10001;
+            transition: 0.3s;
+        }
+        .close-modal:hover {
+            color: var(--gold-primary);
+        }
+        #viewer-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10010;
+            justify-content: center;
+            align-items: center;
+        }
+        .video-modal.active {
+            display: flex;
+        }
+        .video-modal-content {
+            width: 80%;
+            height: 80%;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid var(--gold-primary);
+        }
+        .video-modal-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .close-video {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10020;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 2px solid var(--gold-primary);
+        }
+        @media (max-width: 1200px) {
+            .hero h1 { font-size: 3.8rem; }
+            .section-title { font-size: 2.2rem; }
+            .two-columns { flex-direction: column; }
+        }
+        @media (max-width: 992px) {
+            .navbar { padding: 1rem 2rem; }
+            .nav-links { display: none; }
+            .hero { margin-top: 80px; }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .section-title { font-size: 1.8rem; }
+            .content-wrapper { padding: 2rem 1rem; }
+            .timeline-year { min-width: 100%; margin-bottom: 0.5rem; }
+            .timeline-milestone { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ===== THANH MENU CHUẨN (ĐÃ XÓA KHÔNG GIAN TRƯNG BÀY) ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="logo">ĐST's PROJECT</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Trang chủ</a></li>
+            <li class="nav-item"><a href="#">CHƯƠNG I <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">Thời chúa Nguyễn (Thế kỷ XVII - XVIII)</span>
+                    </div>
+                    <div class="mega-item"><a href="doi-hoang-sa.html"><i class="fas fa-ship"></i><span>Đội Hoàng Sa</span><small>Thành lập dưới thời chúa Nguyễn, hằng năm ra Hoàng Sa, Trường Sa đo đạc, dựng miếu, khai thác sản vật</small></a></div>
+                    <div class="mega-item"><a href="doi-bac-hai.html"><i class="fas fa-water"></i><span>Đội Bắc Hải</span><small>Đội thuyền phía Bắc do Đội Hoàng Sa kiêm quản, thực thi chủ quyền vùng biển phía bắc</small></a></div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="#">CHƯƠNG II <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">Chính quyền Tây Sơn (1771 - 1802)</span>
+                    </div>
+                    <div class="mega-item"><a href="doi-hoang-sa-tay-son.html"><i class="fas fa-ship"></i><span>Duy trì Đội Hoàng Sa (1786)</span><small>Sai phái Hội Đức hầu chỉ huy 4 thuyền ra Hoàng Sa, tiếp tục thực thi chủ quyền</small></a></div>
+                    <div class="mega-item has-submenu">
+                        <div class="submenu-trigger">
+                            <i class="fas fa-expand-alt"></i>
+                            <span>Mở rộng lực lượng</span>
+                            <small>Đội Quế Hương, Đại Mạo, Hải Ba</small>
+                            <i class="fas fa-chevron-right submenu-arrow"></i>
+                        </div>
+                        <div class="submenu">
+                            <a href="doi-que-huong.html"><i class="fas fa-ship"></i><span>Đội Quế Hương</span><small>Hoạt động vùng biển Quảng Nam - Quảng Ngãi</small></a>
+                            <a href="doi-dai-mao.html"><i class="fas fa-water"></i><span>Đội Đại Mạo</span><small>Vùng biển Bình Định - Phú Yên</small></a>
+                            <a href="doi-hai-ba.html"><i class="fas fa-fish"></i><span>Đội Hải Ba</span><small>Vùng biển xa, chuyên khai thác yến, thực thi chủ quyền</small></a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="#" class="active">CHƯƠNG III <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">Triều Nguyễn (1802 - 1945)</span>
+                    </div>
+                    <div class="mega-item"><a href="giai-doan-gia-long.html" class="active"><i class="fas fa-crown"></i><span>Vua Gia Long (1802 - 1820)</span><small>Lập lại đội Hoàng Sa (1803), sai đo đạc thủy trình (1815), cắm cờ xác định chủ quyền Hoàng Sa (1816)</small></a></div>
+                    <div class="mega-item"><a href="giai-doan-minh-mang.html"><i class="fas fa-landmark"></i><span>Vua Minh Mạng (1820 - 1841)</span><small>Chỉ thị dựng bia chủ quyền, đo đạc thủy trình, vẽ bản đồ. Mỗi thuyền thám Hoàng Sa mang theo 10 tấm bài gỗ làm dấu mốc</small></a></div>
+                    <div class="mega-item"><a href="giai-doan-phap-thuoc.html"><i class="fas fa-flag"></i><span>Thời Pháp thuộc (1884 - 1945)</span><small>Pháp tiếp tục thực thi chủ quyền, xây dựng bia chủ quyền trên Hoàng Sa năm 1938</small></a></div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="#">CHƯƠNG IV <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">Quốc gia Việt Nam & Việt Nam Cộng hòa (1945 - 1975)</span>
+                    </div>
+                    <div class="mega-item"><a href="quoc-gia-viet-nam.html"><i class="fas fa-flag"></i><span>Quốc gia Việt Nam (1949 - 1955)</span><small>Tiếp nối chủ quyền, thực thi quyền tài phán trên hai quần đảo</small></a></div>
+                    <div class="mega-item"><a href="viet-nam-cong-hoa.html"><i class="fas fa-landmark"></i><span>Việt Nam Cộng hòa (1955 - 1975)</span><small>Xác lập chủ quyền quốc tế, xây dựng cột mốc, triển khai lực lượng</small></a></div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="#">CHƯƠNG V <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-item" style="grid-column: span 2; text-align: center; border-bottom: 1px solid var(--glass-border); margin-bottom: 1rem;">
+                        <span style="font-size: 1.4rem; color: var(--gold-primary);">CHXHCN Việt Nam (1975 - nay)</span>
+                    </div>
+                    <div class="mega-item"><a href="tiep-quan-thong-nhat.html"><i class="fas fa-flag-checkered"></i><span>Tiếp quản và Thống nhất (1975 - 1976)</span><small>Tháng 4/1975, quân Giải phóng tiếp quản Trường Sa; tháng 7/1976 thống nhất quản lý toàn bộ Hoàng Sa, Trường Sa</small></a></div>
+                    <div class="mega-item"><a href="hanh-lang-phap-ly.html"><i class="fas fa-gavel"></i><span>Hành lang pháp lý</span><small>Tuyên bố 1977, đường cơ sở 1982, Luật Biển Việt Nam 2012, Chiến lược biển 2030, Luật Cảnh sát biển 2018</small></a></div>
+                    <div class="mega-item"><a href="dau-tranh-hoa-binh.html"><i class="fas fa-hand-peace"></i><span>Đấu tranh hòa bình</span><small>Tham gia UNCLOS 1982, ký DOC 2002, đàm phán phân định vịnh Bắc Bộ (2000), hợp tác cùng phát triển</small></a></div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <div class="hero">
+        <div class="hero-content" data-aos="fade-up">
+            <div class="hero-subtitle">TRIỀU NGUYỄN – KHẲNG ĐỊNH CHỦ QUYỀN</div>
+            <h1>Vua <span class="gold-text">Gia Long</span><br>Thống nhất đất nước, xác lập chủ quyền Hoàng Sa</h1>
+            <p>Triều Nguyễn, bắt đầu từ vua Gia Long (1802-1820), đã kế thừa và phát huy truyền thống thực thi chủ quyền của cha ông. Nhà vua đã lập lại đội Hoàng Sa (1803), sai đo đạc thủy trình (1815), và đặc biệt là cử thủy quân ra Hoàng Sa cắm cờ xác định chủ quyền vào năm 1816.</p>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <!-- 1. BỐI CẢNH LỊCH SỬ VÀ SỰ KẾ THỪA -->
+        <div class="section-block" data-aos="fade-up">
+            <h2 class="section-title">Bối cảnh lịch sử & Kế thừa chủ quyền (1802)</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-flag-checkered"></i>
+                        <h3>Thống nhất đất nước và kế thừa chủ quyền biển đảo</h3>
+                        <p>Năm 1802, sau khi đánh bại nhà Tây Sơn, vua Gia Long (Nguyễn Ánh) lên ngôi, thống nhất đất nước, đặt niên hiệu Gia Long, quốc hiệu Việt Nam. Ngay từ đầu triều đại, nhà vua đã xác định rõ tầm quan trọng của việc bảo vệ chủ quyền biển đảo. Ông cho khôi phục và tổ chức lại đội Hoàng Sa – lực lượng đặc trách thực thi chủ quyền trên Biển Đông, kế thừa truyền thống từ thời chúa Nguyễn và Tây Sơn.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Sự kế thừa chủ quyền', 'Vua Gia Long chủ trương kế thừa toàn bộ di sản của các triều đại trước, bao gồm cả chủ quyền đối với Hoàng Sa và Trường Sa. Ông cho kiểm tra lại các bia chủ quyền cũ, củng cố lực lượng thủy quân, và tiếp tục cử thuyền ra khơi hàng năm.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-ship"></i>
+                        <h3>Tổ chức lại đội Hoàng Sa (1803)</h3>
+                        <p>Năm 1803, vua Gia Long ra lệnh lập lại đội Hoàng Sa, tuyển chọn 60 nam đinh từ các làng An Vĩnh, An Hải (Lý Sơn, Quảng Ngãi). Đội được trang bị thuyền câu, lương thực, vũ khí và bia đá. Chế độ đãi ngộ được duy trì: miễn thuế cho gia đình, cấp lương, trợ cấp khi hy sinh. Đội Hoàng Sa hoạt động dưới sự chỉ huy trực tiếp của triều đình.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Lập lại đội Hoàng Sa (1803)', 'Theo Đại Nam thực lục, năm Gia Long thứ 2 (1803), nhà vua cho lập lại đội Hoàng Sa, lấy 60 người từ các xã An Vĩnh, An Hải sung vào đội. Hàng năm, tháng 2 ra khơi, tháng 8 về, thực hiện đo đạc, dựng bia, khai thác sản vật.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-scroll"></i>
+                        <h3>Chính sách quản lý vùng biển</h3>
+                        <p>Dưới thời Gia Long, triều đình ban hành nhiều chính sách quản lý vùng biển, bao gồm quy định về thuế khai thác hải sản, xử phạt hành vi xâm phạm lãnh hải, và tổ chức tuần tra thường xuyên. Các văn bản này được ghi chép trong "Đại Nam thực lục" và "Khâm định Đại Nam hội điển sự lệ".</p>
+                        <button class="detail-btn" onclick="openInfoModal('Chính sách quản lý vùng biển', 'Triều Gia Long quy định: các thuyền đánh cá, khai thác hải sản phải đăng ký với chính quyền địa phương; sản vật khai thác từ Hoàng Sa phải nộp thuế một phần. Các hành vi xâm phạm trái phép bị xử phạt nghiêm.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Quan hệ ngoại giao và chủ quyền</h3>
+                        <p>Triều Gia Long cũng chú trọng quan hệ ngoại giao với các nước trong khu vực. Qua các công hàm, sứ bộ, nhà vua khẳng định chủ quyền của Việt Nam đối với Hoàng Sa và Trường Sa. Các bản đồ phương Tây thời kỳ này cũng thể hiện hai quần đảo thuộc lãnh thổ Việt Nam.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Quan hệ ngoại giao', 'Năm 1817, vua Gia Long gửi công hàm cho chính quyền Pháp ở Ấn Độ, khẳng định chủ quyền của Việt Nam trên Hoàng Sa. Các nhà hàng hải phương Tây đều ghi nhận sự hiện diện của người Việt.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. DẤU ẤN QUA CÁC CHUYẾN HẢI TRÌNH (TIMELINE) -->
+        <div class="section-block" data-aos="fade-up">
+            <h2 class="section-title">Dấu ấn thời Gia Long (1802-1820)</h2>
+            <div class="timeline-milestone">
+                <div class="timeline-year">1803</div>
+                <div class="timeline-content">Vua Gia Long ra lệnh lập lại đội Hoàng Sa, tuyển 60 nam đinh từ Lý Sơn. Đội được tổ chức quy củ, hằng năm ra Hoàng Sa đo đạc, dựng bia, khai thác sản vật.</div>
+                <button class="detail-btn" onclick="openInfoModal('1803: Lập lại đội Hoàng Sa', 'Chỉ dụ năm Gia Long thứ 2 (1803) ghi: “Lập lại đội Hoàng Sa, lấy 60 người từ các xã An Vĩnh, An Hải. Hằng năm, tháng hai xuất thuyền, tháng tám hồi trình, nộp sổ sách và bản đồ”.')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+            <div class="timeline-milestone">
+                <div class="timeline-year">1815</div>
+                <div class="timeline-content">Sai đoàn thuyền ra Hoàng Sa đo đạc thủy trình, vẽ bản đồ chi tiết. Các nhật trình ghi chép đầy đủ tọa độ, độ sâu, đặc điểm các đảo, đá.</div>
+                <button class="detail-btn" onclick="openInfoModal('1815: Đo đạc thủy trình', 'Năm Gia Long thứ 14 (1815), triều đình cử thuyền ra Hoàng Sa để đo đạc thủy trình. Kết quả được tổng hợp thành bản đồ chi tiết, lưu trữ trong nội các.')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+            <div class="timeline-milestone">
+                <div class="timeline-year">1816</div>
+                <div class="timeline-content">Vua Gia Long cử thủy quân ra Hoàng Sa cắm cờ, dựng bia, chính thức xác lập chủ quyền trước sự chứng kiến của các thương thuyền quốc tế. Đây là sự kiện quan trọng khẳng định chủ quyền Việt Nam.</div>
+                <button class="detail-btn" onclick="openInfoModal('1816: Cắm cờ xác lập chủ quyền', 'Đại Nam thực lục ghi: “Tháng 3 năm Gia Long thứ 15 (1816), sai thủy quân ra Hoàng Sa cắm cờ, dựng bia, khẳng định chủ quyền. Các thương thuyền nước ngoài đều chứng kiến.”')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+            <div class="timeline-milestone">
+                <div class="timeline-year">1817</div>
+                <div class="timeline-content">Đội Hoàng Sa thực hiện chuyến khai thác yến sào lớn, thu được 40kg yến nộp về triều đình. Đồng thời, kiểm tra và tu sửa các bia chủ quyền cũ.</div>
+                <button class="detail-btn" onclick="openInfoModal('1817: Khai thác yến sào', 'Chuyến đi năm 1817 kết hợp khai thác yến sào và bảo trì các mốc chủ quyền. Sản lượng yến đạt 40kg, được nộp lên triều đình để dùng trong tế lễ và cống phẩm.')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+            <div class="timeline-milestone">
+                <div class="timeline-year">1819</div>
+                <div class="timeline-content">Chuyến tuần tra cuối cùng dưới thời Gia Long, củng cố các mốc chủ quyền, báo cáo về triều đình, chuẩn bị bàn giao cho vua Minh Mạng.</div>
+                <button class="detail-btn" onclick="openInfoModal('1819: Chuyến tuần tra cuối thời Gia Long', 'Trước khi băng hà (1820), vua Gia Long cho cử thuyền ra Hoàng Sa kiểm tra lần cuối. Báo cáo cho thấy các bia chủ quyền vẫn còn nguyên vẹn.')">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. THỰC THI CHỦ QUYỀN – KHẲNG ĐỊNH CHỦ QUYỀN VIỆT NAM -->
+        <div class="section-block" data-aos="fade-up">
+            <h2 class="section-title">Thực thi chủ quyền – Khẳng định chủ quyền Việt Nam trên Biển Đông</h2>
+            <div class="section-desc">Vua Gia Long và triều Nguyễn đã kế thừa và phát huy truyền thống thực thi chủ quyền của các triều đại trước. Các hoạt động lập lại đội Hoàng Sa, đo đạc thủy trình, cắm cờ, dựng bia là những bằng chứng lịch sử và pháp lý vững chắc về chủ quyền của Việt Nam đối với quần đảo Hoàng Sa và Trường Sa.</div>
+            <div class="two-columns">
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-drafting-compass"></i>
+                        <h3>Đo đạc thủy trình & bản đồ</h3>
+                        <p>Dưới thời Gia Long, công tác đo đạc thủy trình được thực hiện bài bản. Các nhật trình ghi chép chi tiết tọa độ, độ sâu, luồng lạch. Bản đồ Hoàng Sa được vẽ cập nhật, là cơ sở cho các bản đồ chính thức của triều Nguyễn sau này.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Đo đạc thủy trình', 'Đại Nam thực lục ghi: “Năm Gia Long thứ 14 (1815), sai thuyền Hoàng Sa ra đo đạc thủy trình, vẽ bản đồ. Độ sâu nơi nào, đá ngầm chỗ nào, đều ghi chép rõ ràng”.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-gavel"></i>
+                        <h3>Văn bản pháp lý của triều Nguyễn</h3>
+                        <p>Triều Nguyễn dưới thời Gia Long đã ban hành nhiều văn bản hành chính liên quan đến quản lý Hoàng Sa: chỉ dụ lập lại đội Hoàng Sa (1803), quy định về thuế khai thác hải sản (1810), chỉ dụ cắm cờ xác lập chủ quyền (1816). Các văn bản này được lưu trữ trong nội các.</p>
+                        <ul style="margin-left: 1.5rem; color: var(--text-dim);">
+                            <li><strong>Chỉ dụ lập lại đội Hoàng Sa (1803)</strong></li>
+                            <li><strong>Châu bản về thuế yến sào (1810)</strong></li>
+                            <li><strong>Chỉ dụ cắm cờ Hoàng Sa (1816)</strong></li>
+                        </ul>
+                        <button class="detail-btn" onclick="openInfoModal('Văn bản pháp lý', 'Các văn bản này được chép trong “Đại Nam thực lục” và “Khâm định Đại Nam hội điển sự lệ”. Chúng là bằng chứng không thể bác bỏ về việc Nhà nước Việt Nam đã thực thi chủ quyền trên biển Đông từ đầu thế kỷ XIX.')">
+                            <i class="fas fa-info-circle"></i> Xem chi tiết
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-landmark"></i>
+                        <h3>Bia chủ quyền & cắm cờ (1816)</h3>
+                        <p>Sự kiện năm 1816 – vua Gia Long cử thủy quân ra Hoàng Sa cắm cờ, dựng bia – là một mốc son quan trọng. Bia khắc chữ “Gia Long thập ngũ niên, Đại Nam”. Hành động này được thực hiện trước sự chứng kiến của nhiều thương thuyền nước ngoài, khẳng định chủ quyền thực địa.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Cắm cờ Hoàng Sa (1816)', 'Đại Nam thực lục, quyển 51, chép: “Tháng 3, mùa xuân, năm Gia Long thứ 15 (1816), sai thủy quân ra Hoàng Sa cắm cờ, dựng bia. Các thuyền buôn ngoại quốc đều trông thấy.”')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-globe-asia"></i>
+                        <h3>Sự công nhận của quốc tế</h3>
+                        <p>Những hoạt động thực thi chủ quyền dưới thời Gia Long được các nhà hàng hải và nhà bản đồ học phương Tây ghi nhận. Bản đồ “Đại Nam quốc” của giáo sĩ Jean-Louis Taberd (1838) thể hiện Hoàng Sa (Paracel) và Trường Sa (Pracel) thuộc lãnh thổ Việt Nam, kế thừa các dữ liệu từ thời Gia Long.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Sự công nhận quốc tế', 'Các nhà nghiên cứu phương Tây thế kỷ XIX như John Crawfurd, Jean-Louis Taberd đều dựa trên các báo cáo của thương nhân và nhà hàng hải để xác định chủ quyền của Việt Nam trên Hoàng Sa và Trường Sa.')">
+                            <i class="fas fa-info-circle"></i> Xem thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="info-card" style="margin-top: 1.5rem;">
+                <i class="fas fa-link"></i>
+                <h3>Tính liên tục của chủ quyền</h3>
+                <p>Sự tiếp nối giữa thời chúa Nguyễn, Tây Sơn và triều Nguyễn (Gia Long, Minh Mạng và các đời sau) đã tạo thành một chuỗi dài liên tục, không có bất kỳ sự gián đoạn nào. Việc vua Gia Long lập lại đội Hoàng Sa và cắm cờ năm 1816 là sự kế thừa trực tiếp, khẳng định Việt Nam là chủ nhân duy nhất và hợp pháp của quần đảo Hoàng Sa và Trường Sa.</p>
+                <button class="detail-btn" onclick="openInfoModal('Tính liên tục của chủ quyền', 'Từ thế kỷ XVII, Việt Nam đã liên tục thực thi chủ quyền thông qua các hoạt động của đội Hoàng Sa, đội Bắc Hải, các đội thuyền thời Tây Sơn và triều Nguyễn. Hàng trăm chuyến hải trình, hàng chục bia chủ quyền, vô số văn bản hành chính và bản đồ là những chứng cứ không thể phủ nhận.')">
+                    <i class="fas fa-info-circle"></i> Đọc thêm
+                </button>
+            </div>
+        </div>
+
+        <!-- 4. SỐ LIỆU THỐNG KÊ -->
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-number">~18</div>
+                <div class="stat-label">Chuyến hải trình ước tính</div>
+                <div class="stat-label" style="font-size:0.7rem;">Từ 1802 đến 1820</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">~300</div>
+                <div class="stat-label">Binh phu tham gia</div>
+                <div class="stat-label" style="font-size:0.7rem;">Qua các thời kỳ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8+</div>
+                <div class="stat-label">Bia chủ quyền đã dựng</div>
+                <div class="stat-label" style="font-size:0.7rem;">Tại Hoàng Sa</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">18</div>
+                <div class="stat-label">Năm liên tục</div>
+                <div class="stat-label" style="font-size:0.7rem;">Hoạt động không gián đoạn</div>
+            </div>
+        </div>
+
+        <!-- 5. ĐỜI SỐNG TÂM LINH -->
+        <div class="section-block" data-aos="fade-up">
+            <h2 class="section-title">Đời sống & Tâm linh – Gắn bó với biển cả</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-anchor"></i>
+                        <h3>Lễ cúng biển</h3>
+                        <p>Dưới thời Gia Long, tục lệ cúng biển trước mỗi chuyến ra khơi vẫn được duy trì. Nghi lễ được tổ chức long trọng tại đình làng An Hải, An Vĩnh, cầu cho sóng yên bể lặng, đoàn thuyền bình an. Triều đình cũng cho xây dựng đền thờ thủy thần.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Lễ cúng biển', 'Nghi lễ diễn ra vào tháng 2 âm lịch, trước khi thuyền xuất phát. Lễ vật gồm xôi, gà, heo quay, hoa quả, rượu. Thầy cúng đọc văn tế, cầu mong thần biển phù hộ.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-dove"></i>
+                        <h3>Tưởng nhớ binh phu hy sinh</h3>
+                        <p>Những binh phu hy sinh trong các chuyến hải trình được triều đình và gia đình lập mộ gió, tưởng nhớ. Hàng năm, vào ngày khao lề thế lính, người dân Lý Sơn tổ chức lễ lớn, tưởng nhớ công ơn.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Tưởng nhớ binh phu', 'Tại đình làng An Hải, có bàn thờ chung tưởng nhớ các binh phu hy sinh qua các thời kỳ. Hàng năm, vào ngày 16 tháng 3 âm lịch, người dân tổ chức lễ Khao lề Thế lính.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="info-card">
+                        <i class="fas fa-book-open"></i>
+                        <h3>Nhật trình Gia Long</h3>
+                        <p>Các nhật trình thời Gia Long còn được lưu giữ, ghi chép bằng chữ Hán Nôm. Chúng kể về những cơn bão, nạn đói, bệnh tật, sự hy sinh của đồng đội, nhưng cũng ghi lại niềm tự hào khi được cắm cờ dựng bia.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Nhật trình Gia Long', 'Nhật trình của chuyến đi năm 1816 ghi: “Ngày 15 tháng 3, dựng bia xong, cắm cờ vàng. Đội trưởng đọc văn tế, tế thần biển. Các thuyền nước ngoài ở xa trông thấy, đều bắn súng chào mừng.”')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <h3>Hậu thế</h3>
+                        <p>Ngày nay, nhiều gia đình ở Lý Sơn, Quảng Ngãi tự hào vì tổ tiên từng tham gia đội Hoàng Sa dưới thời Gia Long. Họ lưu giữ sắc phong, gia phả, di vật, truyền lại cho con cháu tinh thần yêu nước.</p>
+                        <button class="detail-btn" onclick="openInfoModal('Hậu thế', 'Nhiều gia đình ở Lý Sơn còn lưu giữ sắc phong thời Gia Long, gia phả, kỷ vật. Họ tự hào kể lại những câu chuyện về lòng dũng cảm của cha ông.')">
+                            <i class="fas fa-info-circle"></i> Tìm hiểu thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THƯ MỤC TÀI LIỆU THAM KHẢO (đã đẩy lên trên Di sản) -->
+        <div class="sources-section" data-aos="fade-up">
+            <h3><i class="fas fa-book-open"></i> Thư mục tài liệu tham khảo</h3>
+            <ul>
+                <li>Quốc sử quán triều Nguyễn. <em>Đại Nam thực lục chính biên</em> (đệ nhất kỷ, quyển 22, 50, 52) – ghi chép các sự kiện vua Gia Long lập lại đội Hoàng Sa (1803), đo đạc thủy trình (1815) và cắm cờ xác lập chủ quyền Hoàng Sa (1816). <a href="https://vi.wikipedia.org/wiki/%C4%90%E1%BA%A1i_Nam_th%E1%BB%B1c_l%E1%BB%A5c" target="_blank">Xem tại Wikipedia</a>.</li>
+                <li>Bảo tàng Lịch sử Quốc gia. <em>Vua Gia Long 3 lần phái quân ra Hoàng Sa</em>. <a href="https://baotanglichsu.vn/vi/Articles/3096/8306/vua-gia-long-3-lan-phai-quan-ra-hoang-sa.html" target="_blank">Đọc bài viết</a>.</li>
+                <li>Báo Thanh Niên. <em>Vua Gia Long xác lập chủ quyền Hoàng Sa qua tài liệu phương Tây</em>. <a href="https://thanhnien.vn/vua-gia-long-xac-lap-chu-quyen-hoang-sa-qua-tai-lieu-phuong-tay-185614960.htm" target="_blank">Đọc bài viết</a>.</li>
+                <li>Báo Chính phủ. <em>Việt Nam xác lập chủ quyền từ rất lâu đối với Hoàng Sa, Trường Sa</em>. <a href="https://baochinhphu.vn/viet-nam-xac-lap-chu-quyen-tu-rat-lau-doi-voi-hoang-sa-truong-sa-102213885.htm" target="_blank">Đọc bài viết</a>.</li>
+                <li>Cổng thông tin điện tử Bộ Tài nguyên và Môi trường. <em>Xác lập chủ quyền biển đảo từ rất sớm</em>. <a href="https://mst.gov.vn/xac-lap-chu-quyen-bien-dao-tu-rat-som-197144693.htm" target="_blank">Đọc bài viết</a>.</li>
+                <li>Trung tâm Lưu trữ Quốc gia IV – Đà Lạt. <em>Mộc bản triều Nguyễn</em>.</li>
+                <li>Hồi ký <em>Le mémoire sur la Cochinchine</em> (1820) của Jean-Baptiste Chaigneau.</li>
+                <li>Báo VOV. <em>Hoàng Sa dưới thời cai quản của vua Gia Long</em>. <a href="https://vov.vn/van-hoa-giai-tri/hoang-sa-duoi-thoi-cai-quan-cua-vua-gia-long-331884.vov" target="_blank">Đọc bài viết</a>.</li>
+                <li>Báo Tuổi Trẻ. <em>Triều Nguyễn thực thi chủ quyền</em>. <a href="https://tuoitre.vn/trieu-nguyen-thuc-thi-chu-quyen-1186624.htm" target="_blank">Đọc bài viết</a>.</li>
+            </ul>
+        </div>
+
+        <!-- DI SẢN CỦA VUA GIA LONG (đã đẩy xuống dưới) -->
+        <div class="section-block" data-aos="fade-up">
+            <div class="info-card" style="background: linear-gradient(145deg, rgba(212,175,55,0.1), rgba(0,0,0,0.6)); text-align: center; border: 1px solid var(--gold-primary);">
+                <i class="fas fa-history" style="font-size: 3rem;"></i>
+                <h3>Di sản của vua Gia Long đối với chủ quyền biển đảo</h3>
+                <p style="font-size:1rem;">Vua Gia Long đã đặt nền móng vững chắc cho việc thực thi chủ quyền của triều Nguyễn trên Biển Đông. Việc lập lại đội Hoàng Sa, đo đạc thủy trình, và đặc biệt là cắm cờ xác lập chủ quyền năm 1816 đã khẳng định chủ quyền liên tục, hòa bình của Việt Nam đối với quần đảo Hoàng Sa và Trường Sa. Sự kế thừa này đã tạo thành một chuỗi dài liên tục từ thế kỷ XVII đến nay. Hôm nay, chúng ta là hậu duệ của những người lính biển năm xưa, có trách nhiệm gìn giữ và bảo vệ từng tấc đất, tấc biển của Tổ quốc.</p>
+                <div style="margin-top: 1.5rem;"><i class="fas fa-waveform" style="color: var(--gold-primary); font-size: 2rem; opacity:0.7;"></i></div>
+                <button class="detail-btn" style="margin-top:1rem; justify-content:center;" onclick="openInfoModal('Tổng kết về vua Gia Long', 'Vua Gia Long (1802-1820) đã kế thừa và phát huy truyền thống thực thi chủ quyền của các triều đại trước. Những hoạt động của ông, cùng với các đời vua sau, đã tạo nên một hệ thống quản lý liên tục, hòa bình. Lịch sử đã ghi tạc bằng xương máu, thế hệ hôm nay phải tiếp nối và bảo vệ vững chắc chủ quyền thiêng liêng của Tổ quốc.')">
+                    <i class="fas fa-info-circle"></i> Đọc thêm tổng kết
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-logo">ĐST's PROJECT</div>
+        <div class="footer-mission">
+            Dự án bảo tàng ảo nhằm tôn vinh và lan tỏa những bằng chứng lịch sử, pháp lý về chủ quyền biển đảo Việt Nam, góp phần giáo dục thế hệ trẻ về lòng yêu nước và ý thức bảo vệ chủ quyền thiêng liêng của Tổ quốc.
+        </div>
+        <div class="copyright"><p>&copy; 2026 Bảo tàng Ảo Hoàng Sa - Trường Sa. Tất cả vì chủ quyền thiêng liêng của Tổ quốc.</p></div>
+    </footer>
+
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+
+    <div class="modal-3d" id="modal3d">
+        <div class="modal-content">
+            <span class="close-modal" onclick="close3DViewer()">&times;</span>
+            <div id="viewer-container" style="width:100%;height:100%;"></div>
+        </div>
+    </div>
+    <div class="video-modal" id="videoModal" onclick="closeVideoModal()">
+        <div class="video-modal-content" onclick="event.stopPropagation()">
+            <span class="close-video" onclick="closeVideoModal()">&times;</span>
+            <iframe id="videoIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="">
+    </div>
+    <div class="info-modal" id="infoModal">
+        <div class="info-modal-content">
+            <span class="close-info" onclick="closeInfoModal()">&times;</span>
+            <h3 id="infoTitle"></h3>
+            <div id="infoBody"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+
+        (function() {
+            window.addEventListener('beforeunload', function() {
+                localStorage.setItem('scrollPosition', window.scrollY);
+            });
+            window.addEventListener('load', function() {
+                const savedScroll = localStorage.getItem('scrollPosition');
+                if (savedScroll !== null) {
+                    window.scrollTo(0, parseInt(savedScroll));
+                    localStorage.removeItem('scrollPosition');
+                }
+            });
+        })();
+
+        AOS.init({ duration: 900, once: true, offset: 120 });
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) backToTop.classList.add('visible');
+            else backToTop.classList.remove('visible');
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Particle background
+        const particleCanvas = document.getElementById('particle-canvas');
+        if (particleCanvas) {
+            const ctx = particleCanvas.getContext('2d');
+            let particles = [], width, height;
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                particleCanvas.width = width;
+                particleCanvas.height = height;
+                particles = [];
+                const count = Math.min(200, Math.floor(width * height / 7000));
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        r: Math.random() * 2 + 1,
+                        alpha: Math.random() * 0.5 + 0.2,
+                        dx: (Math.random() - 0.5) * 0.25,
+                        dy: (Math.random() - 0.5) * 0.15
+                    });
+                }
+            }
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                for (let p of particles) {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(212,175,55,${p.alpha * 0.5})`;
+                    ctx.fill();
+                    p.x += p.dx;
+                    p.y += p.dy;
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+                    if (p.y < 0) p.y = height;
+                    if (p.y > height) p.y = 0;
+                }
+                requestAnimationFrame(draw);
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            draw();
+        }
+
+
+        let currentRenderer = null, currentScene = null, currentCamera = null, currentAnimation = null, currentResizeObserver = null;
+        function open3DViewer() {
+            const modal = document.getElementById('modal3d');
+            const container = document.getElementById('viewer-container');
+            while (container.firstChild) container.removeChild(container.firstChild);
+            if (currentRenderer) {
+                if (currentAnimation) cancelAnimationFrame(currentAnimation);
+                currentRenderer.dispose();
+                if (currentResizeObserver) currentResizeObserver.disconnect();
+            }
+            const canvas = document.createElement('canvas');
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            container.appendChild(canvas);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            const group = new THREE.Group();
+            const bodyGeo = new THREE.BoxGeometry(1.9, 0.38, 0.75);
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B, metalness: 0.3 });
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            body.position.y = 0;
+            group.add(body);
+            const mastGeo = new THREE.CylinderGeometry(0.075, 0.11, 1.1);
+            const mastMat = new THREE.MeshStandardMaterial({ color: 0xCD853F });
+            const mast = new THREE.Mesh(mastGeo, mastMat);
+            mast.position.set(0, 0.55, 0);
+            group.add(mast);
+            const sailGeo = new THREE.PlaneGeometry(0.75, 0.95);
+            const sailMat = new THREE.MeshStandardMaterial({ color: 0xF5DEB3, side: THREE.DoubleSide });
+            const sail = new THREE.Mesh(sailGeo, sailMat);
+            sail.position.set(0, 0.65, 0);
+            group.add(sail);
+            scene.add(group);
+            camera.position.set(2, 1.5, 3);
+            camera.lookAt(0, 0.5, 0);
+            const ambientLight = new THREE.AmbientLight(0x404060);
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+            dirLight.position.set(2, 3, 4);
+            scene.add(dirLight);
+            const backLight = new THREE.DirectionalLight(0x886622, 0.5);
+            backLight.position.set(-1, 1, -2);
+            scene.add(backLight);
+            function resizeHandler() {
+                const width = canvas.clientWidth, height = canvas.clientHeight;
+                if (width === 0 || height === 0) return;
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            }
+            const resizeObserver = new ResizeObserver(() => resizeHandler());
+            resizeObserver.observe(canvas);
+            function animate() {
+                currentAnimation = requestAnimationFrame(animate);
+                group.rotation.y += 0.008;
+                group.rotation.x += 0.003;
+                renderer.render(scene, camera);
+            }
+            animate();
+            currentRenderer = renderer;
+            currentScene = scene;
+            currentCamera = camera;
+            currentResizeObserver = resizeObserver;
+            modal.classList.add('active');
+            setTimeout(() => resizeHandler(), 50);
+        }
+        function close3DViewer() {
+            document.getElementById('modal3d').classList.remove('active');
+            if (currentAnimation) cancelAnimationFrame(currentAnimation);
+            if (currentRenderer) currentRenderer.dispose();
+            if (currentResizeObserver) currentResizeObserver.disconnect();
+            currentRenderer = null;
+        }
+        function openVideoModal(url) {
+            document.getElementById('videoIframe').src = url;
+            document.getElementById('videoModal').classList.add('active');
+        }
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            modal.classList.remove('active');
+            document.getElementById('videoIframe').src = '';
+        }
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+        function openInfoModal(title, content) {
+            document.getElementById('infoTitle').innerText = title;
+            document.getElementById('infoBody').innerHTML = `<p>${content}</p>`;
+            document.getElementById('infoModal').classList.add('active');
+        }
+        function closeInfoModal() {
+            document.getElementById('infoModal').classList.remove('active');
+        }
+        window.addEventListener('resize', () => {
+            if (currentRenderer && document.getElementById('modal3d').classList.contains('active') && currentCamera) {
+                const canvas = document.querySelector('#viewer-container canvas');
+                if (canvas) {
+                    currentCamera.aspect = canvas.clientWidth / canvas.clientHeight;
+                    currentCamera.updateProjectionMatrix();
+                    currentRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
